@@ -12,14 +12,15 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
+  int? _selectedRating;
   final List<Map<String, dynamic>> reviews = [
     {
       'id': 1,
       'title': 'Great Laptop',
       'nation': 'USA',
       'author': 'John Doe',
-      'category': 'Electronics',
-      'score': 4.5,
+      'category': 'Dorm',
+      'score': 'Good',
       'detail': 'This laptop has great performance and battery life.',
       'date': '2024-09-20',
       'images': [
@@ -37,12 +38,13 @@ class _ReviewPageState extends State<ReviewPage> {
       'nation': 'Canada',
       'author': 'Jane Smith',
       'category': 'Furniture',
-      'score': 4.0,
+      'score': 'So So',
       'detail': 'The chair is very comfortable for long hours of sitting.',
       'date': '2024-09-19',
       'images': [
         'https://via.placeholder.com/150/FF0000',
         'https://via.placeholder.com/150/00FF00',
+        'https://via.placeholder.com/150/00FF00'
       ],
       'likes': 0,
       'dislikes': 0,
@@ -55,7 +57,7 @@ class _ReviewPageState extends State<ReviewPage> {
       'nation': 'UK',
       'author': 'Alex Johnson',
       'category': 'Electronics',
-      'score': 5.0,
+      'score': 'Bad',
       'detail': 'This phone has an amazing camera and fast performance.',
       'date': '2024-09-18',
       'images': [
@@ -71,7 +73,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
   List<Map<String, dynamic>> filteredReviews = [];
   final TextEditingController searchController = TextEditingController();
-  String? selectedOption;
+  String? selectedOption = 'All'; // Default option set to 'All'
   String? selectedSort;
 
   @override
@@ -81,11 +83,37 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   void filterReviews(String query) {
-    final List<Map<String, dynamic>> filtered = reviews.where((review) {
-      final titleLower = review['title'].toLowerCase();
-      final searchLower = query.toLowerCase();
-      return titleLower.contains(searchLower);
-    }).toList();
+    List<Map<String, dynamic>> filtered = reviews;
+
+    // Category filtering
+    if (selectedOption != null && selectedOption != 'All') {
+      filtered = filtered.where((review) {
+        return review['category'] == selectedOption;
+      }).toList();
+    }
+
+    // Search filter
+    if (query.isNotEmpty) {
+      filtered = filtered.where((review) {
+        final titleLower = review['title'].toLowerCase();
+        final searchLower = query.toLowerCase();
+        return titleLower.contains(searchLower);
+      }).toList();
+    }
+
+    // Score filtering based on _selectedRating
+    if (_selectedRating != null) {
+      filtered = filtered.where((review) {
+        if (_selectedRating == 1) {
+          return review['score'] == 'Good';
+        } else if (_selectedRating == 2) {
+          return review['score'] == 'So So';
+        } else if (_selectedRating == 3) {
+          return review['score'] == 'Bad';
+        }
+        return true;
+      }).toList();
+    }
 
     setState(() {
       filteredReviews = filtered;
@@ -188,6 +216,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       hint: const Text('Category'),
                       value: selectedOption,
                       items: <String>[
+                        'All', // 'All' added here
                         'Dorm',
                         'Building',
                         'Food',
@@ -203,6 +232,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedOption = newValue;
+                          filterReviews(searchController.text); // Apply filter
                         });
                       },
                     ),
@@ -239,140 +269,261 @@ class _ReviewPageState extends State<ReviewPage> {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Good 선택
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.sentiment_very_satisfied, // 웃는 얼굴 아이콘
+                          color:
+                              _selectedRating == 1 ? Colors.green : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedRating = 1;
+                            filterReviews(searchController
+                                .text); // Apply the score filter
+                          });
+                        },
+                      ),
+                      const Text('Good'),
+                    ],
+                  ),
 
+                  // So So 선택
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.sentiment_neutral, // 중립적인 얼굴 아이콘
+                          color: _selectedRating == 2
+                              ? Colors.orange
+                              : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedRating = 2;
+                            filterReviews(searchController
+                                .text); // Apply the score filter
+                          });
+                        },
+                      ),
+                      const Text('So So'),
+                    ],
+                  ),
+
+                  // Bad 선택
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.sentiment_very_dissatisfied, // 찡그린 얼굴 아이콘
+                          color:
+                              _selectedRating == 3 ? Colors.red : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedRating = 3;
+                            filterReviews(searchController
+                                .text); // Apply the score filter
+                          });
+                        },
+                      ),
+                      const Text('Bad'),
+                    ],
+                  ),
+                ],
+              ),
               // Review cards
-              ListView.builder(
-                itemCount: filteredReviews.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final review = filteredReviews[index];
+              if (filteredReviews.isEmpty)
+                Center(
+                  child: Text(
+                    'No reviews available',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey, // 글자 색을 회색으로 설정
+                    ),
+                  ),
+                )
+              else
+                ListView.builder(
+                  itemCount: filteredReviews.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final review = filteredReviews[index];
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Title and action buttons
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Title
-                              Expanded(
-                                child: Text(
-                                  review['title'],
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Title and action buttons
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Title
+                                Expanded(
+                                  child: Text(
+                                    review['title'],
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // Edit and Delete buttons
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () {
-                                      // Navigate to the review update screen
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ReviewUpdateScreen(
-                                            reviewId: review['id'],
-                                            // Pass other review data if needed
+                                // Edit and Delete buttons
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit,
+                                          color: Colors.blue),
+                                      onPressed: () {
+                                        // Navigate to the review update screen
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ReviewUpdateScreen(
+                                              reviewId: review['id'],
+                                              // Pass other review data if needed
+                                            ),
                                           ),
-                                        ),
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        // Delete action
+                                        setState(() {
+                                          filteredReviews.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            // Nation, Author, and Category
+                            Text('Nation: ${review['nation']}'),
+                            Text('Author: ${review['author']}'),
+                            Text('Category: ${review['category']}'),
+                            Text('Date: ${review['date']}'),
+                            const SizedBox(height: 8),
+                            // Score
+// Score Row 수정 부분
+                            Row(
+                              children: [
+                                Icon(
+                                  review['score'] == 'Good'
+                                      ? Icons.sentiment_very_satisfied
+                                      : review['score'] == 'So So'
+                                          ? Icons.sentiment_neutral
+                                          : Icons.sentiment_very_dissatisfied,
+                                  color: review['score'] == 'Good'
+                                      ? Colors.green
+                                      : review['score'] == 'So So'
+                                          ? Colors.orange
+                                          : Colors.red,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4), // 아이콘과 텍스트 사이 간격 추가
+                                Text(
+                                  review['score'].toString(),
+                                  style: TextStyle(
+                                    color: review['score'] == 'Good'
+                                        ? Colors.green
+                                        : review['score'] == 'So So'
+                                            ? Colors.orange
+                                            : Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            // Detail
+                            Text('Detail: ${review['detail']}'),
+                            const SizedBox(height: 12),
+
+                            // Image slider with image count in the top-right corner
+                            SizedBox(
+                              height: 150,
+                              child: Stack(
+                                children: [
+                                  PageView.builder(
+                                    itemCount: review['images'].length,
+                                    itemBuilder: (context, imageIndex) {
+                                      return Image.network(
+                                        review['images'][imageIndex],
+                                        fit: BoxFit.cover,
                                       );
                                     },
                                   ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () {
-                                      // Delete action
-                                      setState(() {
-                                        filteredReviews.removeAt(index);
-                                      });
-                                    },
+                                  Positioned(
+                                    right: 8,
+                                    top: 8,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.5),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        '${review['images'].length} images',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          // Nation, Author, and Category
-                          Text('Nation: ${review['nation']}'),
-                          Text('Author: ${review['author']}'),
-                          Text('Category: ${review['category']}'),
-                          Text('Date: ${review['date']}'),
-                          const SizedBox(height: 8),
-                          // Score
-                          Row(
-                            children: [
-                              const Text('Score: '),
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 16,
-                              ),
-                              Text(review['score'].toString()),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          // Detail
-                          Text('Detail: ${review['detail']}'),
-                          const SizedBox(height: 12),
-                          // Image slider
-                          SizedBox(
-                            height: 150,
-                            child: PageView.builder(
-                              itemCount: review['images'].length,
-                              itemBuilder: (context, imageIndex) {
-                                return Image.network(
-                                  review['images'][imageIndex],
-                                  fit: BoxFit.cover,
-                                );
-                              },
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          // 좋아요/싫어요 버튼
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.thumb_up,
-                                  color: review['liked']
-                                      ? Colors.blue
-                                      : Colors.grey,
+                            const SizedBox(height: 12),
+                            // Like/Dislike buttons
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.thumb_up,
+                                    color: review['liked']
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                  ),
+                                  onPressed: () => toggleLike(index),
                                 ),
-                                onPressed: () => toggleLike(index),
-                              ),
-                              Text(review['likes'].toString()),
-                              const SizedBox(width: 16),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.thumb_down,
-                                  color: review['disliked']
-                                      ? Colors.red
-                                      : Colors.grey,
+                                Text(review['likes'].toString()),
+                                const SizedBox(width: 16),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.thumb_down,
+                                    color: review['disliked']
+                                        ? Colors.red
+                                        : Colors.grey,
+                                  ),
+                                  onPressed: () => toggleDislike(index),
                                 ),
-                                onPressed: () => toggleDislike(index),
-                              ),
-                              Text(review['dislikes'].toString()),
-                            ],
-                          ),
-                        ],
+                                Text(review['dislikes'].toString()),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
               const SizedBox(height: 16),
             ],
           ),

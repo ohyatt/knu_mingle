@@ -155,32 +155,60 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.star),
-                  color: _selectedRating == 1 ? Colors.yellow : Colors.grey,
-                  onPressed: () {
-                    setState(() {
-                      _selectedRating = 1;
-                    });
-                  },
+                // Good 선택
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.sentiment_very_satisfied, // 웃는 얼굴 아이콘
+                        color:
+                            _selectedRating == 1 ? Colors.green : Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _selectedRating = 1;
+                        });
+                      },
+                    ),
+                    const Text('Good'),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.star),
-                  color: _selectedRating == 2 ? Colors.yellow : Colors.grey,
-                  onPressed: () {
-                    setState(() {
-                      _selectedRating = 2;
-                    });
-                  },
+
+                // So So 선택
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.sentiment_neutral, // 중립적인 얼굴 아이콘
+                        color:
+                            _selectedRating == 2 ? Colors.orange : Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _selectedRating = 2;
+                        });
+                      },
+                    ),
+                    const Text('So So'),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.star),
-                  color: _selectedRating == 3 ? Colors.yellow : Colors.grey,
-                  onPressed: () {
-                    setState(() {
-                      _selectedRating = 3;
-                    });
-                  },
+
+                // Bad 선택
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.sentiment_very_dissatisfied, // 찡그린 얼굴 아이콘
+                        color: _selectedRating == 3 ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _selectedRating = 3;
+                        });
+                      },
+                    ),
+                    const Text('Bad'),
+                  ],
                 ),
               ],
             ),
@@ -212,8 +240,13 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                       itemBuilder: (context, index) {
                         return Stack(
                           children: [
-                            Image.file(File(_images[index].path),
-                                fit: BoxFit.cover),
+                            // 이미지 표시
+                            Image.file(
+                              File(_images[index].path),
+                              fit: BoxFit.cover,
+                              width: double.infinity, // 이미지 크기를 화면에 맞춤
+                            ),
+                            // 이미지 삭제 버튼 (오른쪽 상단)
                             Positioned(
                               right: 8,
                               top: 8,
@@ -221,6 +254,28 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                                 icon:
                                     const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () => _removeImage(index),
+                              ),
+                            ),
+                            // 이미지 개수 표시 (왼쪽 하단)
+                            Positioned(
+                              left: 8,
+                              bottom: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '${index + 1} / ${_images.length} images', // 몇 번째 이미지인지 표시
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
