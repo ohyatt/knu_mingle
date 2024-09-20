@@ -2,7 +2,7 @@ package com.example.knu_mingle.controller;
 
 
 import com.example.knu_mingle.domain.User;
-import com.example.knu_mingle.repository.PostRepository;
+import com.example.knu_mingle.repository.MarketRepository;
 import com.example.knu_mingle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MarketRestController {
 
     @Autowired
-    PostRepository postrepository;
+    MarketRepository postrepository;
     UserRepository userrepository;
 
 
