@@ -1,10 +1,7 @@
 package com.example.knu_mingle.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -13,13 +10,21 @@ import lombok.Getter;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
     private Long id;
 
 
-    @Column(name = "name", nullable = false, length = 20)
-    private String name;
+    @Column(name = "first_name", nullable = false, length = 20)
+    private String first_name;
 
-    @Column(name = "email", nullable = false, length = 20)
+    @Column(name = "last_name", nullable = false, length = 20)
+    private String last_name;
+
+    @Column(name= "gender", nullable = false, length =20)
+    private String gender;
+
+    @Column(name = "email", nullable = false, length = 20, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false, length = 20)
@@ -28,7 +33,8 @@ public class User {
     @Column(name = "nation", nullable = false, length = 20)
     private String nation;
 
-    @Column(name = "birth", nullable = false, length = 20)
-    private String birth;
+    @Column(name = "faculty", nullable = false, length = 20)
+    private String faculty;
+
 
 }

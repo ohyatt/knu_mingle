@@ -7,11 +7,13 @@ import com.example.knu_mingle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
-public class AuthRestController {
+public class MarketRestController {
 
     @Autowired
     PostRepository postrepository;
@@ -24,12 +26,6 @@ public class AuthRestController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         userrepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-    }
-
-    @GetMapping("/duplicate")
-    public ResponseEntity<String> EmailDuplicate(@RequestParam String email) {
-        userrepository.findByEmail(email);
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 
