@@ -15,19 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public class MarketRestController {
 
-    @Autowired
-    MarketRepository postrepository;
-    UserRepository userrepository;
 
 
-
-
-
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        userrepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-    }
 
 
 
