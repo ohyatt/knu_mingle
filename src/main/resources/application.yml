@@ -16,6 +16,24 @@ spring:
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "dhtmddn00@gmail.com"
+    password: "iixw vqne oruq glac"
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+    transport:
+      protocol: smtp
+    debug: true
+    default:
+      encoding: UTF-8
+
 debug: true
 
 jwt:
