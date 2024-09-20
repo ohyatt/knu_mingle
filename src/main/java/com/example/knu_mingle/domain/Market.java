@@ -6,13 +6,10 @@ import jakarta.persistence.*;
 @Table(name="market")
 public class Market {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="market_id")
     private Long id;
-
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
