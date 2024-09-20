@@ -39,14 +39,14 @@ public class ReviewRestController {
     @PostMapping
     public ResponseEntity<Review> createReview(@RequestBody Review review) {
         reviewService.createReview(review);
-        return new ResponseEntity<>(HttpStatus.CREATED); // 201 Created
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // 리뷰 수정
     @PutMapping ("/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review review) {
-        Review updatedReview = reviewService.updateReview(review);
-        return new ResponseEntity<>(HttpStatus.OK); // 200 OK
+    public ResponseEntity<Review> updateReview(@RequestBody Review review) {
+        reviewService.updateReview(review);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

@@ -3,6 +3,8 @@ package com.example.knu_mingle.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="review")
 public class Review {
@@ -29,9 +31,9 @@ public class Review {
     private String content;
 
     @Column(name = "createdAt", nullable = false, length = 40)
-    private String createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "modifiedAt", nullable = false, length = 40)
-    private String modifiedAt;
+    private LocalDateTime modifiedAt;
 
     @Column(name = "reaction", nullable = false, length = 20)
     private String reaction;

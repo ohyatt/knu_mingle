@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/knu_mingle.iml" filepath="$PROJECT_DIR$/.idea/knu_mingle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/knu_mingle.main.iml" filepath="$PROJECT_DIR$/.idea/modules/knu_mingle.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/knu_mingle.test.iml" filepath="$PROJECT_DIR$/.idea/modules/knu_mingle.test.iml" />
     </modules>
   </component>
 </project>
