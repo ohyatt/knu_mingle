@@ -1,6 +1,7 @@
 package com.example.knu_mingle.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name="review")
