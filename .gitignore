@@ -17,6 +17,9 @@ local.properties
 # External tool builders
 .externalToolBuilders/
 
+# application-secret
+src/main/resources/application-secret.yml
+
 # Locally stored "Eclipse launch configurations"
 *.launch
 
