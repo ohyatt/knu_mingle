@@ -55,8 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Success'),
-          content: const Text('Logged in successfully.'),
+          title: const Text(
+            'Success',
+          ),
+          content: const Text(
+            'Logged in successfully.',
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -98,6 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextField(
+                          style: TextStyle(fontFamily: 'ggsansBold'),
                           controller: _idController,
                           onChanged: (value) => _checkInput(),
                           decoration: const InputDecoration(
@@ -107,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 16),
                         TextField(
+                          style: TextStyle(fontFamily: 'ggsansBold'),
                           controller: _pwController,
                           onChanged: (value) => _checkInput(),
                           obscureText: true,
@@ -127,7 +133,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               _validateEmail(); // 이메일 유효성 검사 후 로그인 진행
                             }
                           : null,
-                      child: const Text('LOGIN'),
+                      child: const Text(
+                        'LOGIN',
+                        style: TextStyle(fontFamily: 'ggsansBold'),
+                      ),
                     ),
                   ),
                 ],
@@ -137,16 +146,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FindPwScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Find PW'),
-                  ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FindPwScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text('Find PW',
+                          style: TextStyle(fontFamily: 'ggsansBold'))),
                   ElevatedButton(
                     onPressed: () {
                       // User Register 버튼 클릭 시 UserRegisterScreen으로 이동
@@ -157,7 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     },
-                    child: const Text('User Register'),
+                    child: const Text('User Register',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ),
                 ],
               ),

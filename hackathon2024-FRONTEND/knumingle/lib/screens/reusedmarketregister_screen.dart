@@ -57,7 +57,9 @@ class _ReusedMarketRegisterScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stuff Register')),
+      appBar: AppBar(
+          title: const Text('Stuff Register',
+              style: TextStyle(fontFamily: 'ggsansBold'))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -65,6 +67,7 @@ class _ReusedMarketRegisterScreenState
           children: [
             // Title 입력 필드
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               onChanged: (value) {
                 setState(() {
                   _title = value;
@@ -79,6 +82,7 @@ class _ReusedMarketRegisterScreenState
 
             // Preferred Payment Method 입력 필드 (텍스트 필드로 변경)
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               onChanged: (value) {
                 setState(() {
                   _preferredPaymentMethod = value;
@@ -93,6 +97,7 @@ class _ReusedMarketRegisterScreenState
 
             // Description 텍스트 영역
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               maxLength: 1000,
               onChanged: (value) {
                 setState(() {
@@ -110,7 +115,8 @@ class _ReusedMarketRegisterScreenState
             // 이미지 추가 버튼
             ElevatedButton(
               onPressed: _addImages,
-              child: const Text('Add Images'),
+              child: const Text('Add Images',
+                  style: TextStyle(fontFamily: 'ggsansBold')),
             ),
             const SizedBox(height: 16),
 
@@ -152,7 +158,8 @@ class _ReusedMarketRegisterScreenState
                       );
                     }
                   : null, // 폼 유효성 검사
-              child: const Text('Register'),
+              child: const Text('Register',
+                  style: TextStyle(fontFamily: 'ggsansBold')),
             ),
           ],
         ),

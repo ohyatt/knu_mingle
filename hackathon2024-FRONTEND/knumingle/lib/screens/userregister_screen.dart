@@ -71,7 +71,9 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Identity Verification'),
+          title: const Text(
+            'Identity Verification',
+          ),
           content: const Text(
             'An identity verification code has been sent to the email address you entered. Please check it and enter it below "Number for Checking Email."',
           ),
@@ -111,7 +113,9 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(
+          title: const Text('Register',
+              style: TextStyle(fontFamily: 'ggsansBold'))),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -122,6 +126,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      style: TextStyle(fontFamily: 'ggsansBold'),
                       controller: _emailController,
                       enabled: !_isEmailValid, // 이메일이 유효할 때 비활성화
                       decoration: InputDecoration(
@@ -144,14 +149,16 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                     width: 150,
                     child: ElevatedButton(
                       onPressed: _verifyEmail,
-                      child: const Text('Check for duplicates'),
+                      child: const Text('Check for duplicates',
+                          style: TextStyle(fontFamily: 'ggsansBold')),
                     ),
                   ),
                   SizedBox(
                     width: 150,
                     child: ElevatedButton(
                       onPressed: _isEmailValid ? _verifyIdentity : null,
-                      child: const Text('Identity Verification'),
+                      child: const Text('Identity Verification',
+                          style: TextStyle(fontFamily: 'ggsansBold')),
                     ),
                   ),
                 ],
@@ -161,6 +168,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                 alignment: Alignment.centerRight,
                 children: [
                   TextField(
+                    style: TextStyle(fontFamily: 'ggsansBold'),
                     controller: _checkingNumberController,
                     enabled: _isEmailVerified &&
                         !_isNumberValid, // Identity Verification이 되어야 활성화, 체크가 완료된 경우 비활성화
@@ -212,6 +220,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
               ),
               const SizedBox(height: 16),
               TextField(
+                style: TextStyle(fontFamily: 'ggsansBold'),
                 controller: _firstNameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -220,6 +229,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
               ),
               const SizedBox(height: 16),
               TextField(
+                style: TextStyle(fontFamily: 'ggsansBold'),
                 controller: _lastNameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -258,7 +268,8 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                         // 회원 가입 처리 로직 추가
                       }
                     : null,
-                child: const Text('Register'),
+                child: const Text('Register',
+                    style: TextStyle(fontFamily: 'ggsansBold')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                 ),

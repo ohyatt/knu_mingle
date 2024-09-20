@@ -69,13 +69,18 @@ class _FindPwScreenState extends State<FindPwScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Find Password')),
+      appBar: AppBar(
+          title: const Text(
+        'Find Password',
+        style: TextStyle(fontFamily: 'ggsansBold'),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               controller: _emailController,
               onChanged: (value) => _checkEmail(), // 이메일이 변경될 때마다 확인
               decoration: const InputDecoration(
@@ -86,7 +91,10 @@ class _FindPwScreenState extends State<FindPwScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isEmailValid ? _sendEmail : null, // 이메일이 유효할 때만 활성화
-              child: const Text('Send Email'),
+              child: const Text(
+                'Send Email',
+                style: TextStyle(fontFamily: 'ggsansBold'),
+              ),
             ),
           ],
         ),

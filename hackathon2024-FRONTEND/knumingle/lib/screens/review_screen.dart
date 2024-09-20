@@ -16,12 +16,12 @@ class _ReviewPageState extends State<ReviewPage> {
   final List<Map<String, dynamic>> reviews = [
     {
       'id': 1,
-      'title': 'Great Laptop',
-      'nation': 'USA',
+      'title': 'Good Domitory',
+      'nation': 'India',
       'author': 'John Doe',
       'category': 'Dorm',
       'score': 'Good',
-      'detail': 'This laptop has great performance and battery life.',
+      'detail': 'They have a big room, and a good stuff. So, I recommend you !',
       'date': '2024-09-20',
       'images': [
         'https://via.placeholder.com/150',
@@ -168,7 +168,7 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Review'),
+        title: const Text('Review', style: TextStyle(fontFamily: 'ggsansBold')),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -181,6 +181,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 children: [
                   Expanded(
                     child: TextField(
+                      style: TextStyle(fontFamily: 'ggsansBold'),
                       controller: searchController,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
@@ -201,7 +202,8 @@ class _ReviewPageState extends State<ReviewPage> {
                         ),
                       );
                     },
-                    child: const Text('My Account'),
+                    child: const Text('My Account',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ),
                 ],
               ),
@@ -265,7 +267,8 @@ class _ReviewPageState extends State<ReviewPage> {
                         ),
                       );
                     },
-                    child: const Text('Register'),
+                    child: const Text('Register',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ),
                 ],
               ),
@@ -283,13 +286,18 @@ class _ReviewPageState extends State<ReviewPage> {
                         ),
                         onPressed: () {
                           setState(() {
-                            _selectedRating = 1;
+                            if (_selectedRating == 1) {
+                              _selectedRating = null; // 이미 선택된 경우 취소
+                            } else {
+                              _selectedRating = 1; // Good 선택
+                            }
                             filterReviews(searchController
                                 .text); // Apply the score filter
                           });
                         },
                       ),
-                      const Text('Good'),
+                      const Text('Good',
+                          style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
 
@@ -305,13 +313,18 @@ class _ReviewPageState extends State<ReviewPage> {
                         ),
                         onPressed: () {
                           setState(() {
-                            _selectedRating = 2;
+                            if (_selectedRating == 2) {
+                              _selectedRating = null; // 이미 선택된 경우 취소
+                            } else {
+                              _selectedRating = 2; // So So 선택
+                            }
                             filterReviews(searchController
                                 .text); // Apply the score filter
                           });
                         },
                       ),
-                      const Text('So So'),
+                      const Text('So So',
+                          style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
 
@@ -326,13 +339,18 @@ class _ReviewPageState extends State<ReviewPage> {
                         ),
                         onPressed: () {
                           setState(() {
-                            _selectedRating = 3;
+                            if (_selectedRating == 3) {
+                              _selectedRating = null; // 이미 선택된 경우 취소
+                            } else {
+                              _selectedRating = 3; // Bad 선택
+                            }
                             filterReviews(searchController
                                 .text); // Apply the score filter
                           });
                         },
                       ),
-                      const Text('Bad'),
+                      const Text('Bad',
+                          style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
                 ],
@@ -340,12 +358,16 @@ class _ReviewPageState extends State<ReviewPage> {
               // Review cards
               if (filteredReviews.isEmpty)
                 Center(
-                  child: Text(
-                    'No reviews available',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey, // 글자 색을 회색으로 설정
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30.0), // 위쪽에 16px 여백 추가
+                    child: Text(
+                      'No reviews available',
+                      style: TextStyle(
+                        fontFamily: 'ggsansBold',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey, // 글자 색을 회색으로 설정
+                      ),
                     ),
                   ),
                 )
@@ -373,6 +395,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                   child: Text(
                                     review['title'],
                                     style: const TextStyle(
+                                      fontFamily: 'ggsansBold',
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -414,10 +437,16 @@ class _ReviewPageState extends State<ReviewPage> {
                             ),
                             const SizedBox(height: 8),
                             // Nation, Author, and Category
-                            Text('Nation: ${review['nation']}'),
-                            Text('Author: ${review['author']}'),
-                            Text('Category: ${review['category']}'),
-                            Text('Date: ${review['date']}'),
+                            Text(
+                              'Nation: ${review['nation']}',
+                              style: TextStyle(fontFamily: 'ggsansBold'),
+                            ),
+                            Text('Author: ${review['author']}',
+                                style: TextStyle(fontFamily: 'ggsansBold')),
+                            Text('Category: ${review['category']}',
+                                style: TextStyle(fontFamily: 'ggsansBold')),
+                            Text('Date: ${review['date']}',
+                                style: TextStyle(fontFamily: 'ggsansBold')),
                             const SizedBox(height: 8),
                             // Score
 // Score Row 수정 부분
@@ -451,7 +480,8 @@ class _ReviewPageState extends State<ReviewPage> {
                             ),
                             const SizedBox(height: 8),
                             // Detail
-                            Text('Detail: ${review['detail']}'),
+                            Text('Detail: ${review['detail']}',
+                                style: TextStyle(fontFamily: 'ggsansBold')),
                             const SizedBox(height: 12),
 
                             // Image slider with image count in the top-right corner

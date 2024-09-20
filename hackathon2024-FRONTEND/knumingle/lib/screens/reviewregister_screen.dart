@@ -108,7 +108,11 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Review Register')),
+      appBar: AppBar(
+          title: const Text(
+        'Review Register',
+        style: TextStyle(fontFamily: 'ggsansBold'),
+      )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -141,6 +145,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             ),
             const SizedBox(height: 16),
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               onChanged: (value) {
                 setState(() {
                   _title = value;
@@ -170,7 +175,8 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('Good'),
+                    const Text('Good',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
 
@@ -189,7 +195,8 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('So So'),
+                    const Text('So So',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
 
@@ -207,13 +214,15 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('Bad'),
+                    const Text('Bad',
+                        style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 16),
             TextField(
+              style: TextStyle(fontFamily: 'ggsansBold'),
               maxLength: 1000,
               onChanged: (value) {
                 setState(() {
@@ -229,7 +238,8 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _addImages,
-              child: const Text('Add Images'),
+              child: const Text('Add Images',
+                  style: TextStyle(fontFamily: 'ggsansBold')),
             ),
             const SizedBox(height: 16),
             _images.isNotEmpty
@@ -289,7 +299,8 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
               onPressed: _isFormValid()
                   ? () => _showConfirmationDialog(context)
                   : null, // 유효성 검사
-              child: const Text('Register'),
+              child: const Text('Register',
+                  style: TextStyle(fontFamily: 'ggsansBold')),
             ),
           ],
         ),
