@@ -1,6 +1,7 @@
 package com.example.knu_mingle.controller;
 
 import com.example.knu_mingle.domain.Market;
+import com.example.knu_mingle.dto.MarketRequestDto;
 import com.example.knu_mingle.service.MarketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,8 @@ public class MarketRestController {
     private MarketService marketService;
 
     @PostMapping
-    public ResponseEntity<Market> createMarket(@RequestBody Market market) {
-        Market createdMarket = marketService.createMarket(market);
-        return ResponseEntity.status(201).body(createdMarket);
+    public ResponseEntity<Object> createMarket(@RequestBody MarketRequestDto market) {
+        return ResponseEntity.status(201).body(marketService.createMarket(market));
     }
 
 }

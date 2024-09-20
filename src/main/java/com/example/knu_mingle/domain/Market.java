@@ -1,6 +1,9 @@
 package com.example.knu_mingle.domain;
 
+import com.example.knu_mingle.dto.MarketRequestDto;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="market")
@@ -25,9 +28,20 @@ public class Market {
     @Column(name = "method", nullable = false, length = 40)
     private String method;
     @Column(name = "createdAt", nullable = false, length = 40)
-    private String createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "modifiedAt", nullable = false, length = 40)
-    private String modifiedAt;
+    private LocalDateTime modifiedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        modifiedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedAt = LocalDateTime.now();
+    }
 
 }
