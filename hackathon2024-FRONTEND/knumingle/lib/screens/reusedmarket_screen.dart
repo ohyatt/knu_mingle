@@ -65,7 +65,7 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Market'),
+        title: const Text('Market', style: TextStyle(fontFamily: 'ggsansBold')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -77,6 +77,7 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    style: TextStyle(fontFamily: 'ggsansBold'),
                     controller: searchController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -100,7 +101,8 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                       ),
                     );
                   },
-                  child: const Text('My Account'),
+                  child: const Text('My Account',
+                      style: TextStyle(fontFamily: 'ggsansBold')),
                 ),
               ],
             ),
@@ -146,7 +148,8 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                       ),
                     );
                   },
-                  child: const Text('Register'),
+                  child: const Text('Register',
+                      style: TextStyle(fontFamily: 'ggsansBold')),
                 ),
               ],
             ),
@@ -159,28 +162,36 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                   flex: 1,
                   child: Text(
                     'No.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'ggsansBold'),
                   ),
                 ),
                 Expanded(
                   flex: 3,
                   child: Text(
                     'Title',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'ggsansBold'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Author',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'ggsansBold'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Nation',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'ggsansBold'),
                   ),
                 ),
               ],
@@ -210,19 +221,35 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: Text(filteredItems[index]['id'] ?? ''),
+                            child: Text(
+                              filteredItems[index]['id'] ?? '',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontFamily: 'ggsansBold'),
+                            ),
                           ),
                           Expanded(
                             flex: 3,
-                            child: Text(filteredItems[index]['title'] ?? ''),
+                            child: Text(
+                              filteredItems[index]['title'] ?? '',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontFamily: 'ggsansBold'),
+                            ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(filteredItems[index]['author'] ?? ''),
+                            child: Text(
+                              filteredItems[index]['author'] ?? '',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontFamily: 'ggsansBold'),
+                            ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(filteredItems[index]['nation'] ?? ''),
+                            child: Text(
+                              filteredItems[index]['nation'] ?? '',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontFamily: 'ggsansBold'),
+                            ),
                           ),
                         ],
                       ),
