@@ -46,14 +46,21 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
     },
   ];
 
-  String? selectedNation;
+  String? selectedNation = 'All'; // 기본값을 All로 설정
+  final TextEditingController searchController =
+      TextEditingController(); // 검색 필드를 위한 컨트롤러
+  String searchQuery = ''; // 검색어를 저장하는 변수
 
   @override
   Widget build(BuildContext context) {
-    // 선택된 Nation에 따라 필터링된 아이템을 보여줌
-    List<Map<String, String>> filteredItems = selectedNation == null
-        ? items
-        : items.where((item) => item['nation'] == selectedNation).toList();
+    // 선택된 Nation과 검색어에 따라 필터링된 아이템을 보여줌
+    List<Map<String, String>> filteredItems = items.where((item) {
+      final isNationMatch =
+          selectedNation == 'All' || item['nation'] == selectedNation;
+      final isSearchMatch =
+          item['title']!.toLowerCase().contains(searchQuery.toLowerCase());
+      return isNationMatch && isSearchMatch;
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -70,10 +77,16 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: searchController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Search',
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value; // 검색어가 변경될 때마다 상태 갱신
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -102,6 +115,7 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                     hint: const Text('Nation'),
                     value: selectedNation,
                     items: <String>[
+                      'All', // "All" 추가
                       'USA',
                       'Canada',
                       'UK',
