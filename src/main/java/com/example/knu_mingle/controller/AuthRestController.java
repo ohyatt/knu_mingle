@@ -2,6 +2,8 @@ package com.example.knu_mingle.controller;
 
 
 import com.example.knu_mingle.domain.User;
+import com.example.knu_mingle.dto.LoginRequestDto;
+import com.example.knu_mingle.dto.LoginResponseDto;
 import com.example.knu_mingle.dto.UserRegisterRequest;
 import com.example.knu_mingle.dto.UserRegisterResponse;
 import com.example.knu_mingle.repository.MarketRepository;
@@ -38,6 +40,11 @@ public class AuthRestController {
     @GetMapping("/duplicate")
     public boolean EmailDuplicate(@RequestParam String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> Login(@RequestParam LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(userService.login(loginRequestDto));
     }
 
     @PostMapping("/sendMail") //
