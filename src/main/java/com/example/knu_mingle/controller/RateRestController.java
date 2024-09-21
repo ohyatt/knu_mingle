@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/review/{id}/{feeling}")
+@RequestMapping("/ratings")
 public class RateRestController {
 
     @Autowired
     RateService rateService;
 
-    @PostMapping
+    @PostMapping("/{id}")
     public ResponseEntity<Object> rateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, RateRequestDto requestDto) {
         return ResponseEntity.status(201).body(rateService.rateReview(accessToken, id, requestDto));
     }

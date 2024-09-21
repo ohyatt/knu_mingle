@@ -23,21 +23,22 @@ public class RateService {
     @Autowired
     private RateRepository rateRepository;
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewService reviewService;
+    @Autowired
     private UserService userService;
-    private JwtService jwtService;
 
     //리뷰 평가
     public String rateReview(String accessToken, Long id, RateRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
-        Review review = reviewRepository.getById(id);
+        Review review = reviewService.getReview(id);
 
         Rating existingRating = rateRepository.findByReviewAndUser(review, user);
 
         if (existingRating != null) {
             // 같은 감정을 다시 선택하는 경우
             if (existingRating.getFeeling() == requestDto.getFeeling()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already selected.");
+                rateRepository.delete(existingRating);
+                return "Canceled the feeling.";
             } else {
                 // 현재 감정에서 다른 감정으로 변경하는 경우
                 existingRating.setFeeling(requestDto.getFeeling());
