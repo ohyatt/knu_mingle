@@ -1,4 +1,5 @@
 # 라스트 댄스 - KNU Mingle
+<img src="https://github.com/user-attachments/assets/eed6b6ba-9430-4805-80fc-d68ca6372aee" alt="Logo" />
 
 ## 📌 서비스 요약
 KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 앱
