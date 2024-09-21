@@ -1,4 +1,4 @@
-# <라스트 댄스> - <KNU Mingle>
+# 라스트 댄스 - KNU Mingle
 ## 서비스 요약
 KNU Mingle - KNU 외국인 학생을 위한 커뮤니티 앱 
 ex) 탁구왕 - 실력별 탁구 매칭 서비스
