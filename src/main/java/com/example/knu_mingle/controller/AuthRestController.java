@@ -11,7 +11,9 @@ import com.example.knu_mingle.repository.UserRepository;
 import com.example.knu_mingle.service.MailManager;
 import com.example.knu_mingle.service.SHA256Util;
 import com.example.knu_mingle.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +33,20 @@ public class AuthRestController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "회원가입")
     @PostMapping("/register")
     public ResponseEntity<UserRegisterResponse> registerUser(@RequestBody UserRegisterRequest userInfo) {
         UserRegisterResponse response = userService.createUser(userInfo);
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "이메일 중복 확인")
     @GetMapping("/duplicate")
-    public boolean EmailDuplicate(@RequestParam String email) {
-        return userRepository.findByEmail(email).isPresent();
+    public ResponseEntity<Boolean> EmailDuplicate(@RequestParam String email) {
+        return ResponseEntity.ok(userService.emailDuplicate(email));
     }
 
+    @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> Login(@RequestParam LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(userService.login(loginRequestDto));
@@ -69,29 +74,10 @@ public class AuthRestController {
         return false;
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        try {
-            if (userRepository.existsById(userId)) {
-                userRepository.deleteById(userId);
-            } else {
-                throw new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다.");
-            }
-
-            return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("회원 탈퇴 중 오류가 발생했습니다.");
-        }
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping()
+    public ResponseEntity<String> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        return ResponseEntity.ok(userService.deleteUser(accessToken));
     }
-
-
-
-
-
-
-
-
-
 
 }

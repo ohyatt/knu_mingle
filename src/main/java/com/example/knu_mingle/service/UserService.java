@@ -35,4 +35,20 @@ public class UserService {
         }
         throw new IllegalArgumentException("Invalid email or password");
     }
+
+    public boolean emailDuplicate(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public User getUserByToken(String token) {
+        String email = jwtService.getEmailFromToken(token);
+        return getUserByEmail(email);
+    }
+
+    public String deleteUser(String accessToken) {
+        User user = getUserByToken(accessToken);
+        userRepository.delete(user);
+        return "Membership Canceled";
+    }
+
 }
