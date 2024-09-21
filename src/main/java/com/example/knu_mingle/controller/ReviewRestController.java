@@ -21,7 +21,7 @@ import java.util.List;
 public class ReviewRestController {
 
     @Autowired
-    ReviewService reviewService;
+    private ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<List<Review>> getAllReviews() {
@@ -53,8 +53,6 @@ public class ReviewRestController {
     //리뷰 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
-        reviewService.deleteReview(accessToken, id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(reviewService.deleteReview(accessToken, id));
     }
-
 }
