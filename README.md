@@ -1,6 +1,6 @@
 # 라스트 댄스 - KNU Mingle
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/eed6b6ba-9430-4805-80fc-d68ca6372aee" alt="Logo" />
+    <img src="https://github.com/user-attachments/assets/bf5cf514-604d-4101-9ce2-8aa3b11fef45" alt="Logo" style="width: 80%;" />
 </p>
 
 
