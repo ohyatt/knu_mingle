@@ -61,8 +61,8 @@ public class ReviewService {
     public String createReview(String accessToken, ReviewRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
         Review review = requestDto.to(user);
-        imageService.createReviewImage(review,requestDto.getImages());
         reviewRepository.save(review);
+        imageService.createReviewImage(review,requestDto.getImages());
         return "Success";
     }
 
@@ -70,8 +70,8 @@ public class ReviewService {
         User user = userService.getUserByToken(accessToken);
         Review review = reviewRepository.getById(reviewId);
 
-        imageService.updateReviewImage(review,updateDto.getImages());
         reviewRepository.save(updateDto.update(review));
+        imageService.updateReviewImage(review,updateDto.getImages());
         return "Review Updated";
     }
 
