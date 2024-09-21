@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    List<Image> findByMarket(Market market);
-    List<Image> findByReview(Review review);
+   Image findByMarket(Market market);
+   Image findByReview(Review review);
 }

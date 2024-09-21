@@ -2,7 +2,6 @@ package com.example.knu_mingle.service;
 
 import com.example.knu_mingle.domain.*;
 import com.example.knu_mingle.domain.Enum.Keyword;
-import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.dto.*;
 import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,8 @@ public class ReviewService {
     public ReviewPostResponseDto getReview(String accessToken, Long id) {
         User user = userService.getUserByToken(accessToken);
         Review review = reviewRepository.getById(id);
-        List<Image> images = imageService.getImageByReview(review);
-        return new ReviewPostResponseDto(review, images);
+        Image image = imageService.getImageByReview(review);
+        return new ReviewPostResponseDto(review, image.getPath());
     }
 
     public List<ReviewPostResponseDto> getAllReviews(String accessToken) {
@@ -37,8 +36,8 @@ public class ReviewService {
 
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
-            List<Image> images = imageService.getImageByReview(review);
-            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, images);
+            Image image = imageService.getImageByReview(review);
+            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
             responseDtos.add(responseDto);
         }
 
@@ -51,8 +50,8 @@ public class ReviewService {
 
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
-            List<Image> images = imageService.getImageByReview(review);
-            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, images);
+            Image image = imageService.getImageByReview(review);
+            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
             responseDtos.add(responseDto);
         }
 

@@ -16,7 +16,7 @@ public class ReviewUpdateDto {
     private String content;
     private Reaction reaction;
 
-    private List<ImageDto> images;
+    private List<String> images;
 
     public Review update(Review review) {
         review.setKeyword(keyword);

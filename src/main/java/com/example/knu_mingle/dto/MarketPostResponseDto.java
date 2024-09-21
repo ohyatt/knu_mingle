@@ -23,7 +23,7 @@ public class MarketPostResponseDto {
     private LocalDateTime modifiedAt;
     private List<String> imageUrl;
 
-    public MarketPostResponseDto(Market market, List<Image> images) {
+    public MarketPostResponseDto(Market market, Image image) {
         this.userInfoDto = new MarketUserInfoDto(market.getUser());
         this.title = market.getTitle();
         this.content = market.getContent();
@@ -31,13 +31,6 @@ public class MarketPostResponseDto {
         this.method = market.getMethod();
         this.createdAt = market.getCreatedAt();
         this.modifiedAt = market.getModifiedAt();
-        this.imageUrl = new ArrayList<>();
-        if (images != null) {
-            for (Image image : images) {
-                if (image.getPath() != null) {
-                    imageUrl.add(image.getPath());
-                }
-            }
-        }
+        this.imageUrl = image.getPath();
     }
 }

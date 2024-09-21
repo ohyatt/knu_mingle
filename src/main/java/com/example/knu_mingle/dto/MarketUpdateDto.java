@@ -14,8 +14,7 @@ public class MarketUpdateDto {
     private String content;
     private String method;
     private Status status;
-
-    private List<ImageDto> images;
+    private List<String> images;
 
     public Market update(Market market) {
         market.setTitle(title);

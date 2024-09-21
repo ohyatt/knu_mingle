@@ -3,7 +3,8 @@ package com.example.knu_mingle.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +26,5 @@ public class Image {
     private Market market;
 
     @Column(name = "path",nullable = false)
-    private String path;
+    private List<String> path;
 }

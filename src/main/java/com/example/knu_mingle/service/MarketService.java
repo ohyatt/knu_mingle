@@ -46,8 +46,8 @@ public class MarketService {
     public MarketPostResponseDto getMarket(String accessToken, Long marketId) {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(marketId);
-        List<Image> images = imageService.getImageByMarket(market);
-        return new MarketPostResponseDto(market, images);
+        Image image = imageService.getImageByMarket(market);
+        return new MarketPostResponseDto(market, image);
     }
 
     public List<MarketListResponseDto> getMarketList(String accessToken) {

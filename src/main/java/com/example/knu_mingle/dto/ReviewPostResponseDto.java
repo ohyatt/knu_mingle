@@ -21,20 +21,13 @@ public class ReviewPostResponseDto {
     private LocalDateTime modifiedAt;
     private List<String> imageUrl;
 
-    public ReviewPostResponseDto(Review review, List<Image> images) {
+    public ReviewPostResponseDto(Review review, List<String> images) {
         this.userInfoDto = new ReviewUserInfoDto(review.getUser());
         this.title = review.getTitle();
         this.content = review.getContent();
         this.keyword = review.getKeyword();
         this.createdAt = review.getCreatedAt();
         this.modifiedAt = review.getModifiedAt();
-        this.imageUrl = new ArrayList<>();
-        if (images != null) {
-            for (Image image : images) {
-                if (image.getPath() != null) {
-                    imageUrl.add(image.getPath());
-                }
-            }
-        }
+        this.imageUrl = images;
     }
 }
