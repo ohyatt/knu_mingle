@@ -26,21 +26,21 @@ public class User {
     private String last_name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name= "gender", nullable = false, length =20)
+    @Column(name= "gender", nullable = false, length = 20)
     private Gender gender;
 
-    @Column(name = "email", nullable = false, length = 20, unique = true)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "nation", nullable = false, length = 20)
+    @Column(name = "nation", nullable = false, length = 100)
     private Nation nation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "faculty", nullable = false, length = 20)
+    @Column(name = "faculty", nullable = false, length = 100)
     private Faculty faculty;
 
 

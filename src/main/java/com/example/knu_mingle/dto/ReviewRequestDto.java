@@ -7,6 +7,8 @@ import com.example.knu_mingle.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 public class ReviewRequestDto {
@@ -14,6 +16,7 @@ public class ReviewRequestDto {
     private String title;
     private String content;
     private Reaction reaction;
+    private List<String> images;
 
     public Review to(User user) {
         Review review = new Review();
