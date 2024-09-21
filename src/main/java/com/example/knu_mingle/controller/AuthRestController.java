@@ -1,87 +1,54 @@
-package com.example.knu_mingle.controller;
-
+package com.example.knu_mingle.service;
 
 import com.example.knu_mingle.domain.User;
-import com.example.knu_mingle.repository.MarketRepository;
+import com.example.knu_mingle.dto.LoginRequestDto;
+import com.example.knu_mingle.dto.LoginResponseDto;
+import com.example.knu_mingle.dto.UserRegisterRequest;
+import com.example.knu_mingle.dto.UserRegisterResponse;
 import com.example.knu_mingle.repository.UserRepository;
-import com.example.knu_mingle.service.MailManager;
-import com.example.knu_mingle.service.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.NoSuchElementException;
 
-@org.springframework.web.bind.annotation.RestController
-@RequestMapping("/auth")
-public class AuthRestController {
-
+@Service
+public class UserService {
     @Autowired
-    MarketRepository marketRepository;
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    private JwtService jwtService;
 
-
-    MailManager mailManager;
-
-
-
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        userRepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found with email: " + email));
     }
 
-    @GetMapping("/duplicate")
-    public boolean EmailDuplicate(@RequestParam String email) {
+    public UserRegisterResponse createUser(UserRegisterRequest userInfo) {
+        User user = userRepository.save(userInfo.to());
+        return new UserRegisterResponse(user.getId());
+    }
+
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+        User user = getUserByEmail(loginRequestDto.getEmail());
+        if(user.getPassword().equals(loginRequestDto.getPassword())){
+            String token = jwtService.generateToken(user.getEmail());
+            return new LoginResponseDto(token, user.getId());
+        }
+        throw new IllegalArgumentException("Invalid email or password");
+    }
+
+    public boolean emailDuplicate(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    @PostMapping("/sendMail") //
-    @ResponseBody  //AJAX후 값을 리턴하기위해 작성
-    public String SendMail(String email) throws Exception {
-        UUID uuid = UUID.randomUUID(); // 랜덤한 UUID 생성
-        String key = uuid.toString().substring(0, 7); // UUID 문자열 중 7자리만 사용하여 인증번호 생성
-        String sub ="인증번호 입력을 위한 메일 전송";
-        String con = "인증 번호 : "+key;
-        mailManager.send(email,sub,con);
-        key = SHA256Util.getEncrypt(key, email);
-        return key;
-    }
-    @PostMapping("/checkMail") //
-    @ResponseBody
-    public boolean CheckMail(String key, String insertKey,String email) throws Exception {
-        insertKey = SHA256Util.getEncrypt(insertKey, email);
-
-        if(key.equals(insertKey)) {
-            return true;
-        }
-        return false;
+    public User getUserByToken(String token) {
+        String email = jwtService.getEmailFromToken(token);
+        return getUserByEmail(email);
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        try {
-            if (userRepository.existsById(userId)) {
-                userRepository.deleteById(userId);
-            } else {
-                throw new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다.");
-            }
-
-            return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("회원 탈퇴 중 오류가 발생했습니다.");
-        }
+    public String deleteUser(String accessToken) {
+        User user = getUserByToken(accessToken);
+        userRepository.delete(user);
+        return "Membership Canceled";
     }
-
-
-
-
-
-
-
-
-
 
 }

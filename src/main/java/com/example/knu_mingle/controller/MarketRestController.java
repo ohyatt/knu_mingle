@@ -22,5 +22,4 @@ public class MarketRestController {
     public ResponseEntity<Object> createMarket(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @RequestBody MarketRequestDto market) {
         return ResponseEntity.status(201).body(marketService.createMarket(accessToken, market));
     }
-
 }

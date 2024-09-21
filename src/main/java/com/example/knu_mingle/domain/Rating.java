@@ -1,5 +1,6 @@
 package com.example.knu_mingle.domain;
 
+import com.example.knu_mingle.domain.Enum.Feeling;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,5 +21,5 @@ public class Rating {
     private Market market;
 
     @Column(name = "feeling", nullable = false)
-    private String feeling;
+    private Feeling feeling;
 }
