@@ -27,7 +27,7 @@ public class ReviewService {
         User user = userService.getUserByToken(accessToken);
         Review review = reviewRepository.getById(id);
         ReviewImage image = reviewImageService.getImageByReview(review);
-        return new ReviewPostResponseDto(review, image.getPath());
+        return new ReviewPostResponseDto(review, image);
     }
 
     public List<ReviewPostResponseDto> getAllReviews(String accessToken) {
@@ -38,7 +38,7 @@ public class ReviewService {
         for (Review review : reviews) {
             if(!review.getTitle().equals("deleted")){
                 ReviewImage image = reviewImageService.getImageByReview(review);
-                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
+                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image);
                 responseDtos.add(responseDto);
             }
         }
@@ -54,7 +54,7 @@ public class ReviewService {
         for (Review review : reviews) {
             if(!review.getTitle().equals("deleted")){
                 ReviewImage image = reviewImageService.getImageByReview(review);
-                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
+                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image);
                 responseDtos.add(responseDto);
             }
         }
@@ -66,7 +66,7 @@ public class ReviewService {
         User user = userService.getUserByToken(accessToken);
         Review review = requestDto.to(user);
         reviewRepository.save(review);
-        reviewImageService.createReviewImage(review,requestDto.getImages());
+        reviewImageService.createReviewImage(review, requestDto.getImages());
         return "Success";
     }
 

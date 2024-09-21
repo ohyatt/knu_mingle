@@ -18,7 +18,7 @@ public class ReviewImageService {
         image.setReview(review);
         image.setPath(images);
 
-        return reviewImageRepository.save(image);
+        return image;
     }
 
     public void updateReviewImage(Review review, List<String> images) {
