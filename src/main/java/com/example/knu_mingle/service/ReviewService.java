@@ -22,21 +22,21 @@ public class ReviewService {
     private UserService userService;
     private JwtService jwtService;
 
-    public String createReview(String accessToken, ReviewRequestDto requestDto) {
-        String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email);
-
-        Review review = new Review(user, requestDto.getKeyword(), requestDto.getTitle(), requestDto.getContent(),requestDto.getReaction());
-        reviewRepository.save(review);
-        return "Success";
-    }
-
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
 
     public List<Review> getReviewsByKeyword(String keyword) {
+
         return reviewRepository.findByKeyword(keyword);
+    }
+
+    public String createReview(String accessToken, ReviewRequestDto requestDto) {
+        String email = jwtService.getEmailFromToken(accessToken);
+        User user = userService.getUserByEmail(email);
+
+        reviewRepository.save(requestDto.to());
+        return "Success";
     }
 
     public String updateReview(String accessToken, Long reviewId, ReviewRequestDto requestDto) {

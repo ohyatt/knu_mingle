@@ -5,6 +5,7 @@ import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.service.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,8 @@ import java.util.List;
 @RequestMapping("/review")
 public class ReviewRestController {
 
+    @Autowired
     ReviewService reviewService;
-
-    public ReviewRestController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Review>> getAllReviews() {
