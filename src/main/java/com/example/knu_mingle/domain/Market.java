@@ -23,7 +23,7 @@ public class Market {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "title", nullable = false, length = 20)
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
     @Column(name = "content", nullable = false, length = 1000)
@@ -33,7 +33,7 @@ public class Market {
     @Enumerated(EnumType.STRING)
     private Status status = Status.NONE;
 
-    @Column(name = "method", nullable = false, length = 40)
+    @Column(name = "method", nullable = false, length = 100)
     private String method;
     @Column(name = "createdAt", nullable = false, length = 40)
     private LocalDateTime createdAt;
