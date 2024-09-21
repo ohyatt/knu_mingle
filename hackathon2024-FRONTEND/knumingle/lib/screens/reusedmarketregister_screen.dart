@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:knumingle/constants/url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReusedMarketRegisterScreen extends StatefulWidget {
   const ReusedMarketRegisterScreen({Key? key}) : super(key: key);
@@ -52,6 +56,86 @@ class _ReusedMarketRegisterScreenState
     return _title != null &&
         _preferredPaymentMethod != null &&
         _description.isNotEmpty;
+  }
+
+  // 등록 함수
+  Future<void> _registerMarket() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      _showErrorDialog('No token found. Please log in again.');
+      return;
+    }
+
+    final url = '${ApiAddress}/market'; // API 주소를 추가하세요
+
+    // 이미지 경로 리스트 생성
+    List<String> imagePaths = _images.map((image) => image.path).toList();
+
+    final body = jsonEncode({
+      'title': _title,
+      'content': _description,
+      'method': _preferredPaymentMethod,
+      'images': [],
+    });
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token', // 토큰 추가
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 201) {
+      _showSuccessDialog('Successfully registered.');
+    } else {
+      print(response.statusCode);
+      _showErrorDialog('Failed to register. Please try again.');
+    }
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 모달 닫기
+                Navigator.pop(context); // 이전 화면으로 돌아가기
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 모달 닫기
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -150,14 +234,7 @@ class _ReusedMarketRegisterScreenState
 
             // Register 버튼
             ElevatedButton(
-              onPressed: _isFormValid()
-                  ? () {
-                      // 등록 로직 추가 가능
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Form Submitted')),
-                      );
-                    }
-                  : null, // 폼 유효성 검사
+              onPressed: _isFormValid() ? _registerMarket : null, // 유효성 검사 후 등록
               child: const Text('Register',
                   style: TextStyle(fontFamily: 'ggsansBold')),
             ),
