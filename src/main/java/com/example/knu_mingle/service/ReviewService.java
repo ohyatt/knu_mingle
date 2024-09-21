@@ -9,7 +9,9 @@ import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.*;
 import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -44,11 +46,18 @@ public class ReviewService {
         return "Review Updated";
     }
 
-    public String deleteReview(String accessToken, Long reviewId) {
+    public Object deleteReview(String accessToken, Long reviewId) {
         User user = userService.getUserByToken(accessToken);
-        Review review = reviewRepository.getById(reviewId);
+        //리뷰 조회
+        Review review = reviewRepository.findById(reviewId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found with id: " + reviewId));
 
-        reviewRepository.delete(review);
-        return "Review Deleted";
+        if(user.getId().equals(review.getUser().getId())) {
+            reviewRepository.delete(review);
+            return "Review Deleted";
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this review.");
+        }
     }
 }
