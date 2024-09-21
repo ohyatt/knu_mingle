@@ -6,6 +6,8 @@ import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketRequestDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
+import com.example.knu_mingle.dto.UserRegisterRequest;
+import com.example.knu_mingle.dto.UserRegisterResponse;
 import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class ReviewService {
         String email = jwtService.getEmailFromToken(accessToken);
         User user = userService.getUserByEmail(email);
 
-        Review review = new Review();
+        Review review = requestDto.to();
         reviewRepository.save(review);
         return "Success";
     }
@@ -50,12 +52,9 @@ public class ReviewService {
 
     public String deleteReview(String accessToken, Long reviewId) {
         String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email).
-                orElseThrow(() -> new RuntimeException("User not found"));
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
-
         reviewRepository.delete(review);
         return "Review Deleted";
     }

@@ -3,11 +3,15 @@ package com.example.knu_mingle.domain;
 import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Enum.Reaction;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name="review")
 public class Review {
 
