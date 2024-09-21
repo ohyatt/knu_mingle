@@ -23,7 +23,7 @@ public class Location {
     @Column(name ="sector", nullable = false, length = 40)
     private String sector;
 
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "language")
     private Language language;
 }
