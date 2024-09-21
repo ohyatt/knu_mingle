@@ -5,6 +5,7 @@ import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.dto.ImageDto;
 import com.example.knu_mingle.repository.ImageRepository;
+import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,15 @@ import java.util.Map;
 public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public List<Image> createMarketImage(Market market, List<String> images) {
         List<Image> imageList = new ArrayList<>();
 
         for (String imagePath : images) {
             Image image = new Image();
-            //image.setReview(); // 더미 리뷰
+            image.setReview(reviewRepository.getById(1L)); // 더미 리뷰
             image.setMarket(market); // Market 객체 설정
             image.setPath(imagePath); // 이미지 경로 설정
             imageList.add(image); // 리스트에 추가

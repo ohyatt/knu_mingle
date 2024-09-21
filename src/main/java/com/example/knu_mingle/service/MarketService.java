@@ -30,16 +30,16 @@ public class MarketService {
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
         Market market = requestDto.to(user);
-        imageService.createMarketImage(market, requestDto.getImages()); // 이미지 저장 로직
         marketRepository.save(market);
+        imageService.createMarketImage(market, requestDto.getImages()); // 이미지 저장 로직
         return "Success";
     }
 
     public Object updateMarket(String accessToken, Long market_id, MarketUpdateDto updateDto) {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(market_id);
-        imageService.updateMarketImage(market, updateDto.getImages()); // 이미지 업데이트 로직
         marketRepository.save(updateDto.update(market));
+        imageService.updateMarketImage(market, updateDto.getImages()); // 이미지 업데이트 로직
         return "Success";
     }
 
