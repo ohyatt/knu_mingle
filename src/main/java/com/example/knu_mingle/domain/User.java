@@ -6,10 +6,12 @@ import com.example.knu_mingle.domain.Enum.Gender;
 import com.example.knu_mingle.domain.Enum.Nation;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Table(name="user")
+@Setter
 public class User {
 
     @Id

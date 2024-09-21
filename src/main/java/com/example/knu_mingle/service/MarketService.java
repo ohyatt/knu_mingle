@@ -16,7 +16,7 @@ public class MarketService {
 
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
         String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email).orElseThrow();
+        User user = userService.getUserByEmail(email);
         Market market = new Market();
         marketRepository.save(market);
         return "Success";
