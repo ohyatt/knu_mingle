@@ -9,6 +9,7 @@ import com.example.knu_mingle.dto.ReviewPostResponseDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.dto.ReviewUpdateDto;
 import com.example.knu_mingle.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,12 @@ public class ReviewRestController {
     @Autowired
     private ReviewService reviewService;
 
+    @Operation(summary = "리뷰 전체 불러오기")
     @GetMapping
     public ResponseEntity<List<ReviewPostResponseDto>> getAllReviews(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         return ResponseEntity.ok(reviewService.getAllReviews(accessToken));
     }
-
+    @Operation(summary = "키워드별 리뷰 불러오기")
     @GetMapping("/{keyword}")
     public ResponseEntity<List<ReviewPostResponseDto>> getReviewsByKeyword(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Keyword keyword) {
         List<ReviewPostResponseDto> reviews = reviewService.getReviewsByKeyword(accessToken, keyword);
@@ -38,25 +40,25 @@ public class ReviewRestController {
         return new ResponseEntity<>(reviews, HttpStatus.OK); // 200 OK
     }
 
-    //리뷰 생성
+    @Operation(summary = "리뷰 생성")
     @PostMapping
     public ResponseEntity<Object> createReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @RequestBody ReviewRequestDto review) {
         return ResponseEntity.status(201).body(reviewService.createReview(accessToken, review));
     }
 
-    //리뷰 수정
+    @Operation(summary = "리뷰 수정")
     @PutMapping ("/{id}")
     public ResponseEntity<Object> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, @RequestBody ReviewUpdateDto review) {
         return ResponseEntity.status(201).body(reviewService.updateReview(accessToken, id, review));
     }
 
-    //리뷰 삭제
+    @Operation(summary = "리뷰 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
         return ResponseEntity.ok(reviewService.deleteReview(accessToken, id));
     }
 
-    //리뷰 조회
+    @Operation(summary = "특정 리뷰 조회")
     @GetMapping("/{id}")
     public ResponseEntity<Object> getReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
         return ResponseEntity.ok(reviewService.getReview(accessToken,id));
