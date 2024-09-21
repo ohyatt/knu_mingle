@@ -41,6 +41,14 @@ public class Review {
     @Column(name = "reaction", nullable = false, length = 20)
     private Reaction reaction;
 
+    public Review(User user,Keyword keyword, String title, String content, Reaction reaction) {
+        this.user = user;
+        this.keyword = keyword;
+        this.title = title;
+        this.content = content;
+        this.reaction = reaction;
+    }
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();

@@ -26,7 +26,7 @@ public class ReviewService {
         String email = jwtService.getEmailFromToken(accessToken);
         User user = userService.getUserByEmail(email);
 
-        Review review = requestDto.to();
+        Review review = new Review(user, requestDto.getKeyword(), requestDto.getTitle(), requestDto.getContent(),requestDto.getReaction());
         reviewRepository.save(review);
         return "Success";
     }
