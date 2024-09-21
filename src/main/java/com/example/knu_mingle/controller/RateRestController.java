@@ -17,7 +17,7 @@ public class RateRestController {
     RateService rateService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<Object> rateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, RateRequestDto requestDto) {
+    public ResponseEntity<Object> rateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, @RequestBody RateRequestDto requestDto) {
         return ResponseEntity.status(201).body(rateService.rateReview(accessToken, id, requestDto));
     }
 
