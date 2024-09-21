@@ -21,12 +21,12 @@ public class ReviewService {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private ImageService imageService;
+    private ReviewImageService reviewImageService;
 
     public ReviewPostResponseDto getReview(String accessToken, Long id) {
         User user = userService.getUserByToken(accessToken);
         Review review = reviewRepository.getById(id);
-        Image image = imageService.getImageByReview(review);
+        ReviewImage image = reviewImageService.getImageByReview(review);
         return new ReviewPostResponseDto(review, image.getPath());
     }
 
@@ -37,7 +37,7 @@ public class ReviewService {
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
             if(!review.getTitle().equals("deleted")){
-                Image image = imageService.getImageByReview(review);
+                ReviewImage image = reviewImageService.getImageByReview(review);
                 ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
                 responseDtos.add(responseDto);
             }
@@ -53,7 +53,7 @@ public class ReviewService {
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
             if(!review.getTitle().equals("deleted")){
-                Image image = imageService.getImageByReview(review);
+                ReviewImage image = reviewImageService.getImageByReview(review);
                 ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
                 responseDtos.add(responseDto);
             }
@@ -66,7 +66,7 @@ public class ReviewService {
         User user = userService.getUserByToken(accessToken);
         Review review = requestDto.to(user);
         reviewRepository.save(review);
-        imageService.createReviewImage(review,requestDto.getImages());
+        reviewImageService.createReviewImage(review,requestDto.getImages());
         return "Success";
     }
 
@@ -75,7 +75,7 @@ public class ReviewService {
         Review review = reviewRepository.getById(reviewId);
 
         reviewRepository.save(updateDto.update(review));
-        imageService.updateReviewImage(review,updateDto.getImages());
+        reviewImageService.updateReviewImage(review,updateDto.getImages());
         return "Review Updated";
     }
 

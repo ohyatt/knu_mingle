@@ -1,13 +1,12 @@
 package com.example.knu_mingle.dto;
 
 import com.example.knu_mingle.domain.Enum.Status;
-import com.example.knu_mingle.domain.Image;
 import com.example.knu_mingle.domain.Market;
+import com.example.knu_mingle.domain.MarketImage;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -23,7 +22,7 @@ public class MarketPostResponseDto {
     private LocalDateTime modifiedAt;
     private List<String> imageUrl;
 
-    public MarketPostResponseDto(Market market, Image image) {
+    public MarketPostResponseDto(Market market, MarketImage image) {
         this.userInfoDto = new MarketUserInfoDto(market.getUser());
         this.title = market.getTitle();
         this.content = market.getContent();

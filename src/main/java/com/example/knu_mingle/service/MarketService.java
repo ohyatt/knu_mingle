@@ -2,6 +2,7 @@ package com.example.knu_mingle.service;
 
 import com.example.knu_mingle.domain.Image;
 import com.example.knu_mingle.domain.Market;
+import com.example.knu_mingle.domain.MarketImage;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketListResponseDto;
 import com.example.knu_mingle.dto.MarketPostResponseDto;
@@ -25,13 +26,13 @@ public class MarketService {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private ImageService imageService;
+    private MarketImageService marketImageService;
 
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
         Market market = requestDto.to(user);
         marketRepository.save(market);
-        imageService.createMarketImage(market, requestDto.getImages()); // 이미지 저장 로직
+        marketImageService.createMarketImage(market, requestDto.getImages()); // 이미지 저장 로직
         return "Success";
     }
 
@@ -39,14 +40,14 @@ public class MarketService {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(market_id);
         marketRepository.save(updateDto.update(market));
-        imageService.updateMarketImage(market, updateDto.getImages()); // 이미지 업데이트 로직
+        marketImageService.updateMarketImage(market, updateDto.getImages()); // 이미지 업데이트 로직
         return "Success";
     }
 
     public MarketPostResponseDto getMarket(String accessToken, Long marketId) {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(marketId);
-        Image image = imageService.getImageByMarket(market);
+        MarketImage image = marketImageService.getImageByMarket(market);
         return new MarketPostResponseDto(market, image);
     }
 
