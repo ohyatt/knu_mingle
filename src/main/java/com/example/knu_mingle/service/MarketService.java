@@ -68,4 +68,8 @@ public class MarketService {
         }
 
     }
+
+    public Market getMarketById(Long marketId) {
+        return marketRepository.getById(marketId);
+    }
 }
