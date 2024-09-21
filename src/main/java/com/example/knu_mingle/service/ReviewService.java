@@ -1,13 +1,9 @@
 package com.example.knu_mingle.service;
 
-import com.example.knu_mingle.domain.Keyword;
 import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
-import com.example.knu_mingle.dto.MarketRequestDto;
-import com.example.knu_mingle.dto.ReviewRequestDto;
-import com.example.knu_mingle.dto.UserRegisterRequest;
-import com.example.knu_mingle.dto.UserRegisterResponse;
+import com.example.knu_mingle.dto.*;
 import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,22 +34,18 @@ public class ReviewService {
         return "Success";
     }
 
-    public String updateReview(String accessToken, Long reviewId, ReviewRequestDto requestDto) {
-        String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public String updateReview(String accessToken, Long reviewId, ReviewUpdateDto updateDto) {
+        User user = userService.getUserByToken(accessToken);
+        Review review = reviewRepository.getById(reviewId);
 
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
-
-        reviewRepository.save(review);
-        return "Success";
+        reviewRepository.save(updateDto.update(review));
+        return "Review Updated";
     }
 
     public String deleteReview(String accessToken, Long reviewId) {
-        String email = jwtService.getEmailFromToken(accessToken);
+        User user = userService.getUserByToken(accessToken);
+        Review review = reviewRepository.getById(reviewId);
 
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
         reviewRepository.delete(review);
         return "Review Deleted";
     }

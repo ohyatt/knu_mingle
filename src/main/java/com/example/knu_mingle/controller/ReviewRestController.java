@@ -5,6 +5,7 @@ import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketRequestDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
+import com.example.knu_mingle.dto.ReviewUpdateDto;
 import com.example.knu_mingle.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +45,7 @@ public class ReviewRestController {
 
     //리뷰 수정
     @PutMapping ("/{id}")
-    public ResponseEntity<Object> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, @RequestBody ReviewRequestDto review) {
+    public ResponseEntity<Object> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, @RequestBody ReviewUpdateDto review) {
         return ResponseEntity.status(201).body(reviewService.updateReview(accessToken, id, review));
     }
 
