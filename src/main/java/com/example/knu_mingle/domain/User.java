@@ -1,6 +1,9 @@
 package com.example.knu_mingle.domain;
 
 
+import com.example.knu_mingle.domain.Enum.Faculty;
+import com.example.knu_mingle.domain.Enum.Gender;
+import com.example.knu_mingle.domain.Enum.Nation;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -14,7 +17,6 @@ public class User {
     @Column(name="user_id")
     private Long id;
 
-
     @Column(name = "first_name", nullable = false, length = 20)
     private String first_name;
 
@@ -22,7 +24,7 @@ public class User {
     private String last_name;
 
     @Column(name= "gender", nullable = false, length =20)
-    private String gender;
+    private Gender gender;
 
     @Column(name = "email", nullable = false, length = 20, unique = true)
     private String email;
@@ -31,10 +33,10 @@ public class User {
     private String password;
 
     @Column(name = "nation", nullable = false, length = 20)
-    private String nation;
+    private Nation nation;
 
     @Column(name = "faculty", nullable = false, length = 20)
-    private String faculty;
+    private Faculty faculty;
 
 
 }
