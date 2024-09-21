@@ -31,7 +31,7 @@ public class ReviewRestController {
         return ResponseEntity.ok(reviewService.getAllReviews(accessToken));
     }
     @Operation(summary = "키워드별 리뷰 불러오기")
-    @GetMapping("/{keyword}")
+    @GetMapping("/filter/{keyword}")
     public ResponseEntity<List<ReviewPostResponseDto>> getReviewsByKeyword(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Keyword keyword) {
         List<ReviewPostResponseDto> reviews = reviewService.getReviewsByKeyword(accessToken, keyword);
         if (reviews.isEmpty()) {
