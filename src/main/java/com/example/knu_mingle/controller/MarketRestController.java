@@ -1,6 +1,5 @@
 package com.example.knu_mingle.controller;
 
-import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.dto.MarketListResponseDto;
 import com.example.knu_mingle.dto.MarketPostResponseDto;
 import com.example.knu_mingle.dto.MarketRequestDto;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
