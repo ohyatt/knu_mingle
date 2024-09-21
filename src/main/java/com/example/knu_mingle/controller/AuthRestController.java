@@ -1,7 +1,5 @@
 package com.example.knu_mingle.controller;
 
-
-import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.LoginRequestDto;
 import com.example.knu_mingle.dto.LoginResponseDto;
 import com.example.knu_mingle.dto.UserRegisterRequest;
@@ -14,7 +12,6 @@ import com.example.knu_mingle.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

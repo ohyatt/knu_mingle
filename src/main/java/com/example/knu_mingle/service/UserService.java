@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
     private JwtService jwtService;
 
     public User getUserByEmail(String email) {
