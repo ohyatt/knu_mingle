@@ -19,7 +19,9 @@ import java.util.List;
 public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
     private UserService userService;
+    @Autowired
     private JwtService jwtService;
 
     public Review getReview(Long id) {
