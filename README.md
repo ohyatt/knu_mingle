@@ -9,6 +9,45 @@ KNU Mingle - KNU 외국인 학생을 위한 리뷰 & 장터 커뮤니티 앱
 팀명: 라스트 댄스 <br>
 팀원: 이민수, 오승우, 김현수, 김영인
 
+## Team Members
+
+<div style="display: flex; justify-content: space-around;">
+
+<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
+  <img src="https://github.com/ohyatt.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>이민수</h3>
+  <a href="https://github.com/ohyatt" style="text-decoration: none;">
+    <strong>@ohyatt</strong>
+  </a>
+</div>
+
+<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
+  <img src="https://github.com/사용자2.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>본명2</h3>
+  <a href="https://github.com/사용자2" style="text-decoration: none;">
+    <strong>@사용자2</strong>
+  </a>
+</div>
+
+<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
+  <img src="https://github.com/사용자3.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>본명3</h3>
+  <a href="https://github.com/사용자3" style="text-decoration: none;">
+    <strong>@사용자3</strong>
+  </a>
+</div>
+
+<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
+  <img src="https://github.com/사용자4.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>본명4</h3>
+  <a href="https://github.com/사용자4" style="text-decoration: none;">
+    <strong>@사용자4</strong>
+  </a>
+</div>
+
+</div>
+
+
 ## 시연 영상
 (필수) Youtube 링크
 (선택) Github Repository 페이지에서 바로 볼 수 있도록 넣어주셔도 좋습니다.
