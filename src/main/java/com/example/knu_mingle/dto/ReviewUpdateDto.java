@@ -6,6 +6,8 @@ import com.example.knu_mingle.domain.Review;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ReviewUpdateDto {
@@ -13,6 +15,8 @@ public class ReviewUpdateDto {
     private String title;
     private String content;
     private Reaction reaction;
+
+    private List<ImageDto> images;
 
     public Review update(Review review) {
         review.setKeyword(keyword);

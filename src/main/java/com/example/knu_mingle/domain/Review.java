@@ -28,7 +28,7 @@ public class Review {
     @Column(name = "keyword", nullable = false)
     private Keyword keyword;
 
-    @Column(name = "title", nullable = false, length = 20)
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
     @Column(name = "content", nullable = false, length = 1000)

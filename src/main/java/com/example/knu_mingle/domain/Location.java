@@ -15,7 +15,7 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
-    @Column(name = "name",nullable = false, length = 40)
+    @Column(name = "name",nullable = false, length = 100)
     private String name;
 
     @Column(name = "address", nullable = false)

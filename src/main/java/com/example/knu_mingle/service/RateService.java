@@ -6,6 +6,7 @@ import com.example.knu_mingle.domain.Rating;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.RateRequestDto;
+import com.example.knu_mingle.dto.ReviewPostResponseDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.repository.RateRepository;
 import com.example.knu_mingle.repository.ReviewRepository;
@@ -25,14 +26,15 @@ public class RateService {
     @Autowired
     private RateRepository rateRepository;
     @Autowired
-    private ReviewService reviewService;
+    private ReviewRepository reviewRepository;
     @Autowired
     private UserService userService;
 
     //리뷰 평가
     public String rateReview(String accessToken, Long id, RateRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
-        Review review = reviewService.getReview(id);
+
+        Review review = reviewRepository.getById(id);
 
         Rating existingRating = rateRepository.findByReviewAndUser(review, user);
 
@@ -48,11 +50,21 @@ public class RateService {
                 return "Changed feeling.";
             }
         } else {
-            //선택된 감정이 없을 때
+            // 선택된 감정이 없을 때
             Rating newRating = requestDto.to(review, user);
             rateRepository.save(newRating);
-            return "Save Rating.";
+            return "Saved Rating.";
         }
-
     }
+
+    public int getLikeCountByReviewId(Long id) {
+        Review review = reviewRepository.getById(id);
+        return rateRepository.countByReviewAndFeeling(review, Feeling.LIKE);
+    }
+
+    public int getDislikeCountByReviewId(Long id) {
+        Review review = reviewRepository.getById(id);
+        return rateRepository.countByReviewAndFeeling(review, Feeling.DISLIKE);
+    }
+
 }

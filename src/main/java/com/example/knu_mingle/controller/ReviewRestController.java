@@ -5,6 +5,7 @@ import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketRequestDto;
+import com.example.knu_mingle.dto.ReviewPostResponseDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.dto.ReviewUpdateDto;
 import com.example.knu_mingle.service.ReviewService;
@@ -24,14 +25,13 @@ public class ReviewRestController {
     private ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<List<Review>> getAllReviews() {
-        List<Review> reviews = reviewService.getAllReviews();
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    public ResponseEntity<List<ReviewPostResponseDto>> getAllReviews(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        return ResponseEntity.ok(reviewService.getAllReviews(accessToken));
     }
 
     @GetMapping("/{keyword}")
-    public ResponseEntity<List<Review>> getReviewsByKeyword(@PathVariable Keyword keyword) {
-        List<Review> reviews = reviewService.getReviewsByKeyword(keyword);
+    public ResponseEntity<List<ReviewPostResponseDto>> getReviewsByKeyword(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Keyword keyword) {
+        List<ReviewPostResponseDto> reviews = reviewService.getReviewsByKeyword(accessToken, keyword);
         if (reviews.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
         }
@@ -54,5 +54,11 @@ public class ReviewRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
         return ResponseEntity.ok(reviewService.deleteReview(accessToken, id));
+    }
+
+    //리뷰 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.getReview(accessToken,id));
     }
 }
