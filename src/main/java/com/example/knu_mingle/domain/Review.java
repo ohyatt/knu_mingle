@@ -3,6 +3,9 @@ package com.example.knu_mingle.domain;
 import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Enum.Reaction;
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="review")
@@ -27,11 +30,24 @@ public class Review {
     private String content;
 
     @Column(name = "createdAt", nullable = false, length = 40)
-    private String createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "modifiedAt", nullable = false, length = 40)
-    private String modifiedAt;
+    private LocalDateTime modifiedAt;
 
     @Column(name = "reaction", nullable = false, length = 20)
     private Reaction reaction;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        modifiedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedAt = LocalDateTime.now();
+    }
+
 
 }
