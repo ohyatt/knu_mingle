@@ -1,6 +1,7 @@
 package com.example.knu_mingle.dto;
 
 import com.example.knu_mingle.domain.Enum.Keyword;
+import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.domain.Image;
 import com.example.knu_mingle.domain.Review;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class ReviewPostResponseDto {
     private Keyword keyword;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private Reaction reaction;
     private List<String> imageUrl;
 
     public ReviewPostResponseDto(Review review, List<String> images) {
@@ -31,5 +33,6 @@ public class ReviewPostResponseDto {
         this.createdAt = review.getCreatedAt();
         this.modifiedAt = review.getModifiedAt();
         this.imageUrl = images;
+        this.reaction = review.getReaction();
     }
 }

@@ -8,23 +8,23 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        #dialect: org.hibernate.dialect.MySQLDialect
+        #dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
 
   datasource:
-    url: jdbc:h2:mem:testdb  # 인메모리 모드
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    #url: jdbc:h2:mem:testdb  # 인메모리 모드
+    #driver-class-name: org.h2.Driver
+    #username: sa
+    #password:
 
-  h2:
-    console:
-      enabled: true  # H2 콘솔 활성화
+  #h2:
+    #console:
+      #enabled: true  # H2 콘솔 활성화
 
-    #driver-class-name: com.mysql.cj.jdbc.Driver
-    #url: jdbc:mysql://localhost:3306/knu_mingle_db?serverTimezone=UTC&useSSL=false
-    #username: root
-    #password: dhtmddn123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/knu_mingle_db?serverTimezone=UTC&useSSL=false
+    username: root
+    password: dhtmddn123
 
   config:
     additional-location: classpath:application-secret.yml
