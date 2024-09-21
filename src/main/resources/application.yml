@@ -16,27 +16,9 @@ spring:
     username: root
     password: dhtmddn123
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: "dhtmddn00@gmail.com"
-    password: "iixw vqne oruq glac"
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-            required: true
-          auth: true
-    transport:
-      protocol: smtp
-    debug: true
-    default:
-      encoding: UTF-8
+  config:
+    additional-location: classpath:application-secret.yml
 
 debug: true
-
-jwt:
-  secret : 50cf93a35c1788f5a2157a18f95d65df449ea92b7d2f6c2a2fdf30cac0c5106f
 
 
