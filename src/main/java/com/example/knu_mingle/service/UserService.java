@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -52,4 +53,12 @@ public class UserService {
         return "Membership Canceled";
     }
 
+    public User newPassword(String email,String new_password) {
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        Objects.requireNonNull(user).setPassword(new_password);
+
+        return userRepository.save(user);
+
+    }
 }

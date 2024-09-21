@@ -1,6 +1,5 @@
 package com.example.knu_mingle.domain;
 
-import com.example.knu_mingle.domain.Enum.Language;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,9 @@ public class Location {
     @Column(name ="sector", nullable = false, length = 40)
     private String sector;
 
-    @Enumerated(EnumType.STRING)
+    @Column(name ="phoneNumber", nullable = false, length = 40)
+    private String phoneNumber;
+
     @Column(name = "language")
-    private Language language;
+    private String language;
 }
