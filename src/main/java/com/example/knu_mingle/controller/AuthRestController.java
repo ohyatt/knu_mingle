@@ -5,8 +5,6 @@ import com.example.knu_mingle.dto.LoginRequestDto;
 import com.example.knu_mingle.dto.LoginResponseDto;
 import com.example.knu_mingle.dto.UserRegisterRequest;
 import com.example.knu_mingle.dto.UserRegisterResponse;
-import com.example.knu_mingle.repository.MarketRepository;
-import com.example.knu_mingle.repository.UserRepository;
 import com.example.knu_mingle.service.MailManager;
 import com.example.knu_mingle.service.SHA256Util;
 import com.example.knu_mingle.service.UserService;
@@ -54,8 +52,8 @@ public class AuthRestController {
     public String SendMail(String email) throws Exception {
         UUID uuid = UUID.randomUUID(); // 랜덤한 UUID 생성
         String key = uuid.toString().substring(0, 7); // UUID 문자열 중 7자리만 사용하여 인증번호 생성
-        String sub ="Welcome to KNU MINGLE! This is VERFICATION NUMBER MAIL.";
-        String con = "Welcome to KNU MINGLE! This is VERFICATION NUMBER MAIL.\n VERIFICATION NUMBER : "+key+"\n \n" +
+        String sub ="[KNU MINGLE] This is VERFICATION NUMBER MAIL.";
+        String con = "Welcome to KNU MINGLE!\n This is VERFICATION NUMBER MAIL.\n VERIFICATION NUMBER : "+key+"\n \n" +
                 "This is a verification number, so if you enter it, email verification will be completed. ";
         mailManager.send(email,sub,con);
         key = SHA256Util.getEncrypt(key, email);
@@ -87,22 +85,27 @@ public class AuthRestController {
     public ResponseEntity<String> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         return ResponseEntity.ok(userService.deleteUser(accessToken));
     }
-    /*
+
     @PostMapping("/find")
-    public ResponseEntity<String> findPassword(String email) throws Exception {
+    @ResponseBody
+    public ResponseEntity<User> findPassword(@RequestParam String email) throws Exception {
 
-        String sub = "This is your NEW PASSWORD!!";
-        String new_password= "";
-        String con = "s"+new_password;
+        String sub = "[KNU MINGLE] Hello, This is your NEW PASSWORD!!";
 
-        User user = userService.getUserByEmail(email);
+        UUID uuid = UUID.randomUUID(); // 랜덤한 UUID 생성
+        String new_password = uuid.toString().substring(0, 7);
+
+        String con = "[KNU MINGLE] \n YOUR NEW PASSWORD : "+new_password;
+
+
 
         mailManager.send(email, sub, con);
 
 
 
-        return ResponseEntity.ok(userService.createUser());
+        return ResponseEntity.ok(userService.newPassword(email,new_password));
+
 
     }
-    */
+
 }
