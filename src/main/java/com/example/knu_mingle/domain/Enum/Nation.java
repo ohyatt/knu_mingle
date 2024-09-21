@@ -197,5 +197,6 @@ public enum Nation {
     Finland,
     Philippines,
     Hungary,
-    Australia
+    Australia,
+    Korea
 }
