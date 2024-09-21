@@ -55,6 +55,7 @@ public class MarketService {
         List<Market> markets = marketRepository.findAll();
 
         return markets.stream()
+                .filter(market -> !market.getTitle().equals("deleted")) // 제목이 "삭제"인 마켓 제외
                 .map(MarketListResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -67,7 +68,8 @@ public class MarketService {
 
         // 사용자 확인
         if (user.getId().equals(market.getUser().getId())) {
-            marketRepository.deleteById(marketId);
+            market.setTitle("deleted");
+            marketRepository.save(market);
             return "Success";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this market.");
