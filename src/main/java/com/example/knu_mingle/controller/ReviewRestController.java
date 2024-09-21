@@ -3,6 +3,7 @@ package com.example.knu_mingle.controller;
 
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
+import com.example.knu_mingle.dto.MarketRequestDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;

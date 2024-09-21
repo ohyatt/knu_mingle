@@ -32,10 +32,9 @@ public class ReviewService {
     }
 
     public String createReview(String accessToken, ReviewRequestDto requestDto) {
-        String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email);
-
-        reviewRepository.save(requestDto.to());
+        User user = userService.getUserByToken(accessToken);
+        Review review = requestDto.to(user);
+        reviewRepository.save(review);
         return "Success";
     }
 

@@ -13,12 +13,13 @@ public class ReviewRequestDto {
     private String content;
     private Reaction reaction;
 
-    public Review to() {
+    public Review to(User user) {
         Review review = new Review();
         review.setKeyword(keyword);
         review.setTitle(title);
         review.setContent(content);
         review.setReaction(reaction);
+        review.setUser(user);
 
         return review;
     }
