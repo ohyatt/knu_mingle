@@ -37,7 +37,8 @@ public class RateService {
         if (existingRating != null) {
             // 같은 감정을 다시 선택하는 경우
             if (existingRating.getFeeling() == requestDto.getFeeling()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already selected.");
+                rateRepository.delete(existingRating);
+                return "Canceled the feeling.";
             } else {
                 // 현재 감정에서 다른 감정으로 변경하는 경우
                 existingRating.setFeeling(requestDto.getFeeling());
