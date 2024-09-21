@@ -38,7 +38,7 @@ public class RateService {
 
         if (existingRating != null) {
             // 같은 감정을 다시 선택하는 경우
-            if (existingRating.getFeeling() == requestDto.getFeeling()) {
+            if (existingRating.getFeeling().equals(requestDto.getFeeling())) {
                 rateRepository.delete(existingRating);
                 return "Canceled the feeling.";
             } else {
