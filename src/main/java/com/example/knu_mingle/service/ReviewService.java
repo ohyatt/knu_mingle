@@ -1,11 +1,8 @@
 package com.example.knu_mingle.service;
 
+import com.example.knu_mingle.domain.*;
 import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Enum.Reaction;
-import com.example.knu_mingle.domain.Market;
-import com.example.knu_mingle.domain.Rating;
-import com.example.knu_mingle.domain.Review;
-import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.*;
 import com.example.knu_mingle.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,24 +21,48 @@ public class ReviewService {
     private UserService userService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private ImageService imageService;
 
-    public Review getReview(Long id) {
-        //User user = userService.getUserByToken(accessToken);
-        return reviewRepository.getById(id);
+    public ReviewPostResponseDto getReview(String accessToken, Long id) {
+        User user = userService.getUserByToken(accessToken);
+        Review review = reviewRepository.getById(id);
+        List<Image> images = imageService.getImageByReview(review);
+        return new ReviewPostResponseDto(review, images);
     }
 
-    public List<Review> getAllReviews() {
-        return reviewRepository.findAll();
+    public List<ReviewPostResponseDto> getAllReviews(String accessToken) {
+        User user = userService.getUserByToken(accessToken);
+        List<Review> reviews = reviewRepository.findAll();
+
+        List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
+        for (Review review : reviews) {
+            List<Image> images = imageService.getImageByReview(review);
+            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, images);
+            responseDtos.add(responseDto);
+        }
+
+        return responseDtos;
     }
 
-    public List<Review> getReviewsByKeyword(Keyword keyword) {
+    public List<ReviewPostResponseDto> getReviewsByKeyword(String accessToken, Keyword keyword) {
+        User user = userService.getUserByToken(accessToken);
+        List<Review> reviews = reviewRepository.findByKeyword(keyword);
 
-        return reviewRepository.findByKeyword(keyword);
+        List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
+        for (Review review : reviews) {
+            List<Image> images = imageService.getImageByReview(review);
+            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, images);
+            responseDtos.add(responseDto);
+        }
+
+        return responseDtos;
     }
 
     public String createReview(String accessToken, ReviewRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
         Review review = requestDto.to(user);
+        imageService.createReviewImage(review,requestDto.getImages());
         reviewRepository.save(review);
         return "Success";
     }
@@ -49,6 +71,7 @@ public class ReviewService {
         User user = userService.getUserByToken(accessToken);
         Review review = reviewRepository.getById(reviewId);
 
+        imageService.updateReviewImage(review,updateDto.getImages());
         reviewRepository.save(updateDto.update(review));
         return "Review Updated";
     }

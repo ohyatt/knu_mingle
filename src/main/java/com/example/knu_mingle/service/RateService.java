@@ -6,6 +6,7 @@ import com.example.knu_mingle.domain.Rating;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.RateRequestDto;
+import com.example.knu_mingle.dto.ReviewPostResponseDto;
 import com.example.knu_mingle.dto.ReviewRequestDto;
 import com.example.knu_mingle.repository.RateRepository;
 import com.example.knu_mingle.repository.ReviewRepository;
@@ -32,7 +33,7 @@ public class RateService {
     //리뷰 평가
     public String rateReview(String accessToken, Long id, RateRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
-        Review review = reviewService.getReview(id);
+        ReviewPostResponseDto review = reviewService.getReview(accessToken,id);
 
         Rating existingRating = rateRepository.findByReviewAndUser(review, user);
 
