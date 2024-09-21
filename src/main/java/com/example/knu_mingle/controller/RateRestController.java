@@ -21,4 +21,6 @@ public class RateRestController {
         return ResponseEntity.status(201).body(rateService.rateReview(accessToken, id, requestDto));
     }
 
+
+
 }

@@ -4,7 +4,9 @@ import com.example.knu_mingle.domain.Enum.Feeling;
 import com.example.knu_mingle.domain.Rating;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
+import lombok.Getter;
 
+@Getter
 public class RateRequestDto {
     private Feeling feeling;
 
