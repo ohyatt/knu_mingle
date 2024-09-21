@@ -1,5 +1,6 @@
 package com.example.knu_mingle.domain;
 
+import com.example.knu_mingle.domain.Enum.Language;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,5 +25,5 @@ public class Location {
 
 
     @Column(name = "language")
-    private String language;
+    private Language language;
 }
