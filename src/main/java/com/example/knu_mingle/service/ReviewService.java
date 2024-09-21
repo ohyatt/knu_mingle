@@ -1,5 +1,6 @@
 package com.example.knu_mingle.service;
 
+import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class ReviewService {

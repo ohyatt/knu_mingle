@@ -1,5 +1,6 @@
 package com.example.knu_mingle.repository;
 
+import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
