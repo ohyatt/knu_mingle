@@ -5,6 +5,8 @@ import com.example.knu_mingle.domain.Market;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class MarketUpdateDto {
@@ -12,6 +14,8 @@ public class MarketUpdateDto {
     private String content;
     private String method;
     private Status status;
+
+    private List<ImageDto> images;
 
     public Market update(Market market) {
         market.setTitle(title);
