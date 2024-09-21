@@ -3,6 +3,7 @@ package com.example.knu_mingle.service;
 import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketRequestDto;
+import com.example.knu_mingle.dto.MarketUpdateDto;
 import com.example.knu_mingle.repository.MarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,17 @@ public class MarketService {
     private JwtService jwtService;
 
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
-        String email = jwtService.getEmailFromToken(accessToken);
-        User user = userService.getUserByEmail(email);
-        Market market = new Market();
+        User user = userService.getUserByToken(accessToken);
+        Market market = requestDto.to(user);
         marketRepository.save(market);
+        return "Success";
+    }
+
+    public Object updateMarket(String accessToken, Long market_id, MarketUpdateDto updateDto) {
+        User user = userService.getUserByToken(accessToken);
+        Market market = marketRepository.getById(market_id);
+
+        marketRepository.save(updateDto.update(market));
         return "Success";
     }
 }
