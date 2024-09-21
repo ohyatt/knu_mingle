@@ -17,13 +17,13 @@ public class ListController {
     private ListService listService;
 
     @Operation(summary = "국가 목록 반환")
-    @GetMapping
+    @GetMapping("/nations")
     public ResponseEntity<List<String>> getNationList() {
         return ResponseEntity.ok(listService.getNations());
     }
 
     @Operation(summary = "단대 목록 반환")
-    @GetMapping
+    @GetMapping("/faculties")
     public ResponseEntity<List<String>> getFacultyList() {
         return ResponseEntity.ok(listService.getFaculties());
     }
