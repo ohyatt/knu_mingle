@@ -36,9 +36,11 @@ public class ReviewService {
 
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
-            Image image = imageService.getImageByReview(review);
-            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
-            responseDtos.add(responseDto);
+            if(!review.getTitle().equals("deleted")){
+                Image image = imageService.getImageByReview(review);
+                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
+                responseDtos.add(responseDto);
+            }
         }
 
         return responseDtos;
@@ -50,9 +52,11 @@ public class ReviewService {
 
         List<ReviewPostResponseDto> responseDtos = new ArrayList<>();
         for (Review review : reviews) {
-            Image image = imageService.getImageByReview(review);
-            ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
-            responseDtos.add(responseDto);
+            if(!review.getTitle().equals("deleted")){
+                Image image = imageService.getImageByReview(review);
+                ReviewPostResponseDto responseDto = new ReviewPostResponseDto(review, image.getPath());
+                responseDtos.add(responseDto);
+            }
         }
 
         return responseDtos;
@@ -82,7 +86,8 @@ public class ReviewService {
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found with id: " + reviewId));
 
         if(user.getId().equals(review.getUser().getId())) {
-            reviewRepository.delete(review);
+            review.setTitle("deleted");
+            reviewRepository.save(review);
             return "Review Deleted";
         }
         else {
