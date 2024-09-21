@@ -11,41 +11,12 @@ KNU Mingle - KNU 외국인 학생을 위한 리뷰 & 장터 커뮤니티 앱
 
 ## Team Members
 
-<div style="display: flex; justify-content: space-around;">
+|                         |                         |                         |                         |
+|-------------------------|-------------------------|-------------------------|-------------------------|
+| <img src="https://github.com/ohyatt.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/Youngini.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/beoldshoe.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/dhtmddn00.png" width="100" height="100" style="border-radius:50%;"> |
+| **이민수**              | **김영인**              | **김현수**              | **오승우**              |
+| [@ohyatt](https://github.com/ohyatt)  | [@Youngini](https://github.com/Youngini) | [@beoldshoe](https://github.com/beoldshoe) | [@dhtmddn00](https://github.com/dhtmddn00) |
 
-<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/ohyatt.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>이민수</h3>
-  <a href="https://github.com/ohyatt" style="text-decoration: none;">
-    <strong>@ohyatt</strong>
-  </a>
-</div>
-
-<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/Youngini.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>김영인</h3>
-  <a href="https://github.com/Youngini" style="text-decoration: none;">
-    <strong>@Youngini</strong>
-  </a>
-</div>
-
-<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/beoldshoe.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>김현수</h3>
-  <a href="https://github.com/beoldshoe" style="text-decoration: none;">
-    <strong>@beoldshoe</strong>
-  </a>
-</div>
-
-<div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/dhtmddn00.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>오승우</h3>
-  <a href="https://github.com/dhtmddn00" style="text-decoration: none;">
-    <strong>@dhtmddn00</strong>
-  </a>
-</div>
-
-</div>
 
 
 ## 시연 영상
