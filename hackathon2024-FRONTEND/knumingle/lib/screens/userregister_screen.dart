@@ -450,7 +450,10 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Text(value,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2 // 텍스트가 넘칠 경우 말줄임표로 처리
+                              ),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
