@@ -57,12 +57,14 @@ public class RateService {
         }
     }
 
-    public int getLikeCountByReviewId(Long reviewId) {
-        return rateRepository.countByReviewAndFeeling(reviewId, Feeling.LIKE);
+    public int getLikeCountByReviewId(Long id) {
+        Review review = reviewRepository.getById(id);
+        return rateRepository.countByReviewAndFeeling(review, Feeling.LIKE);
     }
 
-    public int getDislikeCountByReviewId(Long reviewId) {
-        return rateRepository.countByReviewAndFeeling(reviewId, Feeling.DISLIKE);
+    public int getDislikeCountByReviewId(Long id) {
+        Review review = reviewRepository.getById(id);
+        return rateRepository.countByReviewAndFeeling(review, Feeling.DISLIKE);
     }
 
 }
