@@ -71,5 +71,7 @@ public class ImageService {
         imageRepository.saveAll(existingImages);
     }
 
-
+    public List<Image> getImageByMarket(Market market) {
+        return imageRepository.findByMarket(market);
+    }
 }

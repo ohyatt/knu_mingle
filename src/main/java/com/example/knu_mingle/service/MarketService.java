@@ -1,5 +1,6 @@
 package com.example.knu_mingle.service;
 
+import com.example.knu_mingle.domain.Image;
 import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketListResponseDto;
@@ -45,7 +46,8 @@ public class MarketService {
     public MarketPostResponseDto getMarket(String accessToken, Long marketId) {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(marketId);
-        return new MarketPostResponseDto(market);
+        List<Image> images = imageService.getImageByMarket(market);
+        return new MarketPostResponseDto(market, images);
     }
 
     public List<MarketListResponseDto> getMarketList(String accessToken) {
