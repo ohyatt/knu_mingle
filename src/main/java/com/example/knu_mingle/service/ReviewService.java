@@ -1,7 +1,9 @@
 package com.example.knu_mingle.service;
 
+import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.domain.Market;
+import com.example.knu_mingle.domain.Rating;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.*;
@@ -22,7 +24,7 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public List<Review> getReviewsByKeyword(String keyword) {
+    public List<Review> getReviewsByKeyword(Keyword keyword) {
 
         return reviewRepository.findByKeyword(keyword);
     }

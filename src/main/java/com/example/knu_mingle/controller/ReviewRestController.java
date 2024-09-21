@@ -1,6 +1,7 @@
 package com.example.knu_mingle.controller;
 
 
+import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
 import com.example.knu_mingle.dto.MarketRequestDto;
@@ -29,7 +30,7 @@ public class ReviewRestController {
     }
 
     @GetMapping("/{keyword}")
-    public ResponseEntity<List<Review>> getReviewsByKeyword(@PathVariable String keyword) {
+    public ResponseEntity<List<Review>> getReviewsByKeyword(@PathVariable Keyword keyword) {
         List<Review> reviews = reviewService.getReviewsByKeyword(keyword);
         if (reviews.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
@@ -55,7 +56,5 @@ public class ReviewRestController {
         reviewService.deleteReview(accessToken, id);
         return ResponseEntity.noContent().build();
     }
-
-
 
 }
