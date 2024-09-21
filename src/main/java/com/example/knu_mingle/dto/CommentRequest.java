@@ -3,7 +3,11 @@ package com.example.knu_mingle.dto;
 import com.example.knu_mingle.domain.Comment;
 import com.example.knu_mingle.domain.Market;
 import com.example.knu_mingle.domain.User;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class CommentRequest {
     private String content;
     private boolean isPublic;

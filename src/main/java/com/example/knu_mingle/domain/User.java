@@ -25,6 +25,7 @@ public class User {
     @Column(name = "last_name", nullable = false, length = 20)
     private String last_name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name= "gender", nullable = false, length =20)
     private Gender gender;
 
@@ -34,9 +35,11 @@ public class User {
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "nation", nullable = false, length = 20)
     private Nation nation;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "faculty", nullable = false, length = 20)
     private Faculty faculty;
 

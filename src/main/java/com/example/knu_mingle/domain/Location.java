@@ -2,9 +2,11 @@ package com.example.knu_mingle.domain;
 
 import com.example.knu_mingle.domain.Enum.Language;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "location")
 public class Location {
@@ -23,7 +25,7 @@ public class Location {
     @Column(name ="sector", nullable = false, length = 40)
     private String sector;
 
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "language")
     private Language language;
 }

@@ -24,6 +24,7 @@ public class Review {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "keyword", nullable = false)
     private Keyword keyword;
 
@@ -38,6 +39,7 @@ public class Review {
     @Column(name = "modifiedAt", nullable = false, length = 40)
     private LocalDateTime modifiedAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "reaction", nullable = false, length = 20)
     private Reaction reaction;
 
