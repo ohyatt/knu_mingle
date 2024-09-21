@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface RateRepository extends JpaRepository<Rating, Long> {
 
     Rating findByReviewAndUser(Review review, User user);
+    int countByReviewAndFeeling(Long reviewId, Feeling feeling);
 }
