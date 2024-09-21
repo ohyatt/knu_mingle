@@ -22,26 +22,26 @@ KNU Mingle - KNU 외국인 학생을 위한 리뷰 & 장터 커뮤니티 앱
 </div>
 
 <div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/사용자2.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>본명2</h3>
-  <a href="https://github.com/사용자2" style="text-decoration: none;">
-    <strong>@사용자2</strong>
+  <img src="https://github.com/Youngini.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>김영인</h3>
+  <a href="https://github.com/Youngini" style="text-decoration: none;">
+    <strong>@Youngini</strong>
   </a>
 </div>
 
 <div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/사용자3.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>본명3</h3>
-  <a href="https://github.com/사용자3" style="text-decoration: none;">
-    <strong>@사용자3</strong>
+  <img src="https://github.com/beoldshoe.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>김현수</h3>
+  <a href="https://github.com/beoldshoe" style="text-decoration: none;">
+    <strong>@beoldshoe</strong>
   </a>
 </div>
 
 <div style="text-align: center; width: 200px; border: 2px solid #ddd; padding: 10px; border-radius: 10px;">
-  <img src="https://github.com/사용자4.png" width="100" height="100" style="border-radius: 50%;" />
-  <h3>본명4</h3>
-  <a href="https://github.com/사용자4" style="text-decoration: none;">
-    <strong>@사용자4</strong>
+  <img src="https://github.com/dhtmddn00.png" width="100" height="100" style="border-radius: 50%;" />
+  <h3>오승우</h3>
+  <a href="https://github.com/dhtmddn00" style="text-decoration: none;">
+    <strong>@dhtmddn00</strong>
   </a>
 </div>
 
