@@ -2,10 +2,13 @@ package com.example.knu_mingle.controller;
 
 
 import com.example.knu_mingle.domain.User;
+import com.example.knu_mingle.dto.UserRegisterRequest;
+import com.example.knu_mingle.dto.UserRegisterResponse;
 import com.example.knu_mingle.repository.MarketRepository;
 import com.example.knu_mingle.repository.UserRepository;
 import com.example.knu_mingle.service.MailManager;
 import com.example.knu_mingle.service.SHA256Util;
+import com.example.knu_mingle.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +26,13 @@ public class AuthRestController {
 
 
     MailManager mailManager;
-
-
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        userRepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+    public ResponseEntity<UserRegisterResponse> registerUser(@RequestBody UserRegisterRequest userInfo) {
+        UserRegisterResponse response = userService.createUser(userInfo);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/duplicate")
