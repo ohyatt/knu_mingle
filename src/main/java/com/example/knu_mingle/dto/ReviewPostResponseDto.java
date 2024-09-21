@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 public class ReviewPostResponseDto {
     private ReviewUserInfoDto userInfoDto;
+    private Long id;
     private String title;
     private String content;
     private Keyword keyword;
@@ -23,6 +24,7 @@ public class ReviewPostResponseDto {
 
     public ReviewPostResponseDto(Review review, List<String> images) {
         this.userInfoDto = new ReviewUserInfoDto(review.getUser());
+        this.id = review.getId();
         this.title = review.getTitle();
         this.content = review.getContent();
         this.keyword = review.getKeyword();
