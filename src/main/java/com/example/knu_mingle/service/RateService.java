@@ -23,14 +23,14 @@ public class RateService {
     @Autowired
     private RateRepository rateRepository;
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewService reviewService;
+    @Autowired
     private UserService userService;
-    private JwtService jwtService;
 
     //리뷰 평가
     public String rateReview(String accessToken, Long id, RateRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
-        Review review = reviewRepository.getById(id);
+        Review review = reviewService.getReview(id);
 
         Rating existingRating = rateRepository.findByReviewAndUser(review, user);
 

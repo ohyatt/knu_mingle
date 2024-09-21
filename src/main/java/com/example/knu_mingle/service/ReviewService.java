@@ -22,6 +22,11 @@ public class ReviewService {
     private UserService userService;
     private JwtService jwtService;
 
+    public Review getReview(Long id) {
+        //User user = userService.getUserByToken(accessToken);
+        return reviewRepository.getById(id);
+    }
+
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
