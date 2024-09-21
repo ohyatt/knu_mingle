@@ -4,7 +4,11 @@ import com.example.knu_mingle.domain.Enum.Faculty;
 import com.example.knu_mingle.domain.Enum.Gender;
 import com.example.knu_mingle.domain.Enum.Nation;
 import com.example.knu_mingle.domain.User;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class MarketUserInfoDto {
     private Long id;
     private String first_name;

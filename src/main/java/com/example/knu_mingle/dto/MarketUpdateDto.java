@@ -2,7 +2,11 @@ package com.example.knu_mingle.dto;
 
 import com.example.knu_mingle.domain.Enum.Status;
 import com.example.knu_mingle.domain.Market;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class MarketUpdateDto {
     private String title;
     private String content;

@@ -3,7 +3,11 @@ package com.example.knu_mingle.dto;
 import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Enum.Reaction;
 import com.example.knu_mingle.domain.Review;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ReviewUpdateDto {
     private Keyword keyword;
     private String title;
