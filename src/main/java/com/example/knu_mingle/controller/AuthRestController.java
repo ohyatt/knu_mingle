@@ -45,7 +45,7 @@ public class AuthRestController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> Login(@RequestParam LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResponseDto> Login(@RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(userService.login(loginRequestDto));
     }
 

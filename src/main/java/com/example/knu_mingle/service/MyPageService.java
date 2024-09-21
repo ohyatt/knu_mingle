@@ -12,15 +12,12 @@ public class MyPageService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
-    public User MyPage(Long userId)
+    public User MyPage(String accessToken)
     {
-
-        User user =userRepository.findById(userId).orElse(null);
-
-        return user;
-
-
+        return userService.getUserByToken(accessToken);
     }
 
     public User MyPageUpdate(User user)

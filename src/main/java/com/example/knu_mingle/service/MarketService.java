@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 public class MarketService {
     @Autowired
     private MarketRepository marketRepository;
+    @Autowired
     private UserService userService;
+    @Autowired
     private JwtService jwtService;
 
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
