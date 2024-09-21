@@ -15,16 +15,16 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
-    @Column(name = "name",nullable = false, length = 100)
+    @Column(name = "name",nullable = false)
     private String name;
 
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name ="sector", nullable = false, length = 40)
+    @Column(name ="sector", nullable = false, length = 100)
     private String sector;
 
-    @Column(name ="phoneNumber", nullable = false, length = 40)
+    @Column(name ="phoneNumber", nullable = false)
     private String phoneNumber;
 
     @Column(name = "language")
