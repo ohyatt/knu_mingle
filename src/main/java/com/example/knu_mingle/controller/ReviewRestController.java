@@ -1,9 +1,15 @@
 package com.example.knu_mingle.controller;
 
 
+import com.example.knu_mingle.domain.Enum.Keyword;
 import com.example.knu_mingle.domain.Review;
 import com.example.knu_mingle.domain.User;
+import com.example.knu_mingle.dto.MarketRequestDto;
+import com.example.knu_mingle.dto.ReviewRequestDto;
+import com.example.knu_mingle.dto.ReviewUpdateDto;
 import com.example.knu_mingle.service.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +20,17 @@ import java.util.List;
 @RequestMapping("/review")
 public class ReviewRestController {
 
-    ReviewService reviewService;
-
-    public ReviewRestController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<List<Review>> getAllReviews() {
         List<Review> reviews = reviewService.getAllReviews();
-        return new ResponseEntity<>(reviews, HttpStatus.OK); // 200 OK와 함께 리뷰 목록 반환
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     @GetMapping("/{keyword}")
-    public ResponseEntity<List<Review>> getReviewsByKeyword(@PathVariable String keyword) {
+    public ResponseEntity<List<Review>> getReviewsByKeyword(@PathVariable Keyword keyword) {
         List<Review> reviews = reviewService.getReviewsByKeyword(keyword);
         if (reviews.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
@@ -35,26 +38,21 @@ public class ReviewRestController {
         return new ResponseEntity<>(reviews, HttpStatus.OK); // 200 OK
     }
 
-    // 리뷰 작성
+    //리뷰 생성
     @PostMapping
-    public ResponseEntity<Review> createReview(@RequestBody Review review) {
-        reviewService.createReview(review);
-        return new ResponseEntity<>(HttpStatus.CREATED); // 201 Created
+    public ResponseEntity<Object> createReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @RequestBody ReviewRequestDto review) {
+        return ResponseEntity.status(201).body(reviewService.createReview(accessToken, review));
     }
 
-    // 리뷰 수정
+    //리뷰 수정
     @PutMapping ("/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review review) {
-        Review updatedReview = reviewService.updateReview(review);
-        return new ResponseEntity<>(HttpStatus.OK); // 200 OK
+    public ResponseEntity<Object> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id, @RequestBody ReviewUpdateDto review) {
+        return ResponseEntity.status(201).body(reviewService.updateReview(accessToken, id, review));
     }
 
-
-
-
-
-
-
-
-
+    //리뷰 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken, @PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.deleteReview(accessToken, id));
+    }
 }
