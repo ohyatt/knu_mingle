@@ -21,6 +21,10 @@ public class RateRestController {
         return ResponseEntity.status(201).body(rateService.rateReview(accessToken, id, requestDto));
     }
 
+    //@GetMapping("/{id}")
+    //리뷰 id인 PathVariable id 값으로 해당 리뷰에 feeling(좋아요와 싫어요 각각) 갯수 합산해서 보내줘야 함
+
+
 
 
 }
