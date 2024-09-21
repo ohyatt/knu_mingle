@@ -12,4 +12,14 @@ public class ReviewRequestDto {
     private String title;
     private String content;
     private Reaction reaction;
+
+    public Review to() {
+        Review review = new Review();
+        review.setKeyword(keyword);
+        review.setTitle(title);
+        review.setContent(content);
+        review.setReaction(reaction);
+
+        return review;
+    }
 }
