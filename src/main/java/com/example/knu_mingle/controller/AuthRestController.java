@@ -2,8 +2,8 @@ package com.example.knu_mingle.controller;
 
 
 import com.example.knu_mingle.domain.User;
-import com.example.knu_mingle.repository.MarketRepository;
-import com.example.knu_mingle.repository.UserRepository;
+
+import com.example.knu_mingle.service.AuthService;
 import com.example.knu_mingle.service.MailManager;
 import com.example.knu_mingle.service.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ import java.util.UUID;
 public class AuthRestController {
 
     @Autowired
-    MarketRepository marketRepository;
-    UserRepository userRepository;
+    AuthService authService;
+
 
 
     MailManager mailManager;
@@ -28,13 +28,13 @@ public class AuthRestController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
-        userRepository.save(user);
+        authService.CreateUser(user);
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/duplicate")
     public boolean EmailDuplicate(@RequestParam String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return authService.DuplicateEmail(email);
     }
 
     @PostMapping("/sendMail") //
@@ -62,11 +62,7 @@ public class AuthRestController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
-            if (userRepository.existsById(userId)) {
-                userRepository.deleteById(userId);
-            } else {
-                throw new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다.");
-            }
+            authService.DeleteUser(userId);
 
             return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
         } catch (Exception e) {
