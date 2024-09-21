@@ -8,7 +8,6 @@ import com.example.knu_mingle.dto.MarketRequestDto;
 import com.example.knu_mingle.dto.MarketUpdateDto;
 import com.example.knu_mingle.repository.MarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,10 +23,13 @@ public class MarketService {
     private UserService userService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private ImageService imageService;
 
     public String createMarket(String accessToken, MarketRequestDto requestDto) {
         User user = userService.getUserByToken(accessToken);
         Market market = requestDto.to(user);
+        imageService.createMarketImage(market, requestDto.getImages()); // 이미지 저장 로직
         marketRepository.save(market);
         return "Success";
     }
@@ -35,7 +37,7 @@ public class MarketService {
     public Object updateMarket(String accessToken, Long market_id, MarketUpdateDto updateDto) {
         User user = userService.getUserByToken(accessToken);
         Market market = marketRepository.getById(market_id);
-
+        imageService.updateMarketImage(market, updateDto.getImages()); // 이미지 업데이트 로직
         marketRepository.save(updateDto.update(market));
         return "Success";
     }
