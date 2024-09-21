@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:knumingle/constants/url.dart';
 import 'package:knumingle/screens/review_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewRegisterScreen extends StatefulWidget {
   const ReviewRegisterScreen({Key? key}) : super(key: key);
@@ -53,6 +57,45 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
         _description.isNotEmpty;
   }
 
+  Future<void> _registerReview() async {
+    final url = '$ApiAddress/review'; // Review API endpoint
+    final reaction = _selectedRating == 1
+        ? 'GOOD'
+        : _selectedRating == 2
+            ? 'SOSO'
+            : 'BAD';
+
+    final body = jsonEncode({
+      'keyword': _selectedCategory,
+      'title': _title,
+      'content': _description,
+      'reaction': reaction,
+    });
+    print(body);
+
+    // 로컬 스토리지에서 토큰 가져오기
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    print(token);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token', // 토큰이 있을 경우만 추가
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 201) {
+      _showSuccessDialog(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Failed to register review: ${response.statusCode}')),
+      );
+    }
+  }
+
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -70,7 +113,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // 닫기
-                _showSuccessDialog(context); // 성공 모달 표시
+                _registerReview(); // 리뷰 등록 호출
               },
               child: const Text('OK'),
             ),
@@ -109,10 +152,11 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-        'Review Register',
-        style: TextStyle(fontFamily: 'ggsansBold'),
-      )),
+        title: const Text(
+          'Review Register',
+          style: TextStyle(fontFamily: 'ggsansBold'),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -121,12 +165,12 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             DropdownButtonFormField<String>(
               value: _selectedCategory,
               items: const [
-                'Dorm',
-                'Building',
-                'Food',
+                'Dormitory',
+                'Facility',
+                'Foods',
                 'Courses',
-                'Life hack',
-                'etc',
+                'Tips',
+                'Ects'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -145,7 +189,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             ),
             const SizedBox(height: 16),
             TextField(
-              style: TextStyle(fontFamily: 'ggsansBold'),
+              style: const TextStyle(fontFamily: 'ggsansBold'),
               onChanged: (value) {
                 setState(() {
                   _title = value;
@@ -160,12 +204,11 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // Good 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_very_satisfied, // 웃는 얼굴 아이콘
+                        Icons.sentiment_very_satisfied,
                         color:
                             _selectedRating == 1 ? Colors.green : Colors.grey,
                       ),
@@ -175,17 +218,15 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('Good',
+                    const Text('GOOD',
                         style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
-
-                // So So 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_neutral, // 중립적인 얼굴 아이콘
+                        Icons.sentiment_neutral,
                         color:
                             _selectedRating == 2 ? Colors.orange : Colors.grey,
                       ),
@@ -195,17 +236,15 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('So So',
+                    const Text('SOSO',
                         style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
-
-                // Bad 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_very_dissatisfied, // 찡그린 얼굴 아이콘
+                        Icons.sentiment_very_dissatisfied,
                         color: _selectedRating == 3 ? Colors.red : Colors.grey,
                       ),
                       onPressed: () {
@@ -214,7 +253,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         });
                       },
                     ),
-                    const Text('Bad',
+                    const Text('BAD',
                         style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
@@ -222,7 +261,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             ),
             const SizedBox(height: 16),
             TextField(
-              style: TextStyle(fontFamily: 'ggsansBold'),
+              style: const TextStyle(fontFamily: 'ggsansBold'),
               maxLength: 1000,
               onChanged: (value) {
                 setState(() {
@@ -250,13 +289,11 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                       itemBuilder: (context, index) {
                         return Stack(
                           children: [
-                            // 이미지 표시
                             Image.file(
                               File(_images[index].path),
                               fit: BoxFit.cover,
-                              width: double.infinity, // 이미지 크기를 화면에 맞춤
+                              width: double.infinity,
                             ),
-                            // 이미지 삭제 버튼 (오른쪽 상단)
                             Positioned(
                               right: 8,
                               top: 8,
@@ -266,7 +303,6 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                                 onPressed: () => _removeImage(index),
                               ),
                             ),
-                            // 이미지 개수 표시 (왼쪽 하단)
                             Positioned(
                               left: 8,
                               bottom: 8,
@@ -280,7 +316,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  '${index + 1} / ${_images.length} images', // 몇 번째 이미지인지 표시
+                                  '${index + 1} / ${_images.length} images',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -298,7 +334,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             ElevatedButton(
               onPressed: _isFormValid()
                   ? () => _showConfirmationDialog(context)
-                  : null, // 유효성 검사
+                  : null,
               child: const Text('Register',
                   style: TextStyle(fontFamily: 'ggsansBold')),
             ),

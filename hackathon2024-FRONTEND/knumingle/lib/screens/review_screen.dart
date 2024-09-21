@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:knumingle/components/underbar.dart';
+import 'package:knumingle/constants/url.dart';
 import 'package:knumingle/screens/myaccount_screen.dart';
 import 'package:knumingle/screens/reviewregister_screen.dart';
-import 'package:knumingle/screens/reviewupdate_screen.dart'; // Import your update screen
+import 'package:knumingle/screens/reviewupdate_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import your update screen
+import 'package:http/http.dart' as http;
 
 class ReviewPage extends StatefulWidget {
   ReviewPage({super.key});
@@ -13,73 +17,136 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   int? _selectedRating;
-  final List<Map<String, dynamic>> reviews = [
-    {
-      'id': 1,
-      'title': 'Good Domitory',
-      'nation': 'India',
-      'author': 'John Doe',
-      'category': 'Dorm',
-      'score': 'Good',
-      'detail': 'They have a big room, and a good stuff. So, I recommend you !',
-      'date': '2024-09-20',
-      'images': [
-        'https://via.placeholder.com/150',
-        'https://via.placeholder.com/150/0000FF',
-      ],
-      'likes': 0,
-      'dislikes': 0,
-      'liked': false,
-      'disliked': false,
-    },
-    {
-      'id': 2,
-      'title': 'Comfortable Chair',
-      'nation': 'Canada',
-      'author': 'Jane Smith',
-      'category': 'Furniture',
-      'score': 'So So',
-      'detail': 'The chair is very comfortable for long hours of sitting.',
-      'date': '2024-09-19',
-      'images': [
-        'https://via.placeholder.com/150/FF0000',
-        'https://via.placeholder.com/150/00FF00',
-        'https://via.placeholder.com/150/00FF00'
-      ],
-      'likes': 0,
-      'dislikes': 0,
-      'liked': false,
-      'disliked': false,
-    },
-    {
-      'id': 3,
-      'title': 'Excellent Phone',
-      'nation': 'UK',
-      'author': 'Alex Johnson',
-      'category': 'Electronics',
-      'score': 'Bad',
-      'detail': 'This phone has an amazing camera and fast performance.',
-      'date': '2024-09-18',
-      'images': [
-        'https://via.placeholder.com/150/FFFF00',
-        'https://via.placeholder.com/150/000000',
-      ],
-      'likes': 0,
-      'dislikes': 0,
-      'liked': false,
-      'disliked': false,
-    },
-  ];
-
+  List<Map<String, dynamic>> reviews = [];
   List<Map<String, dynamic>> filteredReviews = [];
   final TextEditingController searchController = TextEditingController();
-  String? selectedOption = 'All'; // Default option set to 'All'
+  String? selectedOption; // 초기값을 null로 설정
   String? selectedSort;
 
   @override
   void initState() {
     super.initState();
-    filteredReviews = reviews;
+    selectedOption = 'All'; // 기본 옵션을 'All'로 설정
+    _fetchReviews();
+  }
+
+  Future<void> _fetchReviews() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      setState(() {
+        print('No token found.');
+      });
+      return;
+    }
+
+    final url = '${ApiAddress}/review'; // API URL
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+      final List<dynamic> responseData = jsonDecode(response.body);
+      setState(() {
+        reviews = responseData.map((item) {
+          return {
+            'id': item['id'],
+            'title': item['title'],
+            'nation': item['user']['nation'],
+            'author':
+                '${item['user']['first_name']} ${item['user']['last_name']}',
+            'category': item['keyword'], // Assuming this maps to the category
+            'score': item['reaction'], // Assuming this maps to the score
+            'detail': item['content'],
+            'date': item['createdAt'],
+            'images': [], // Adjust this if you have image URLs
+            'likes': 0,
+            'dislikes': 0,
+            'liked': false,
+            'disliked': false,
+            'userId': item['user']['id']
+          };
+        }).toList();
+        print(reviews);
+        filteredReviews = reviews; // 초기 상태에서 필터링된 리뷰도 동일하게 설정
+      });
+    } else {
+      setState(() {
+        print('Error fetching reviews: ${response.statusCode}');
+      });
+    }
+  }
+
+  Future<void> _deleteReview(String reviewId, String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedUserId =
+        prefs.getString('userId'); // 로컬 스토리지에서 userId 가져오기
+
+    if (storedUserId == userId) {
+      final url = '${ApiAddress}/review/$reviewId'; // DELETE 요청할 URL
+
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer ${prefs.getString('token')}', // 토큰 추가
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // 성공적으로 삭제되었을 때
+        _showSuccessDialog();
+      } else {
+        _showErrorDialog('Failed to delete review: ${response.statusCode}');
+      }
+    } else {
+      _showErrorDialog('You cannot delete this review.');
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Review deleted successfully.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 닫기
+                _fetchReviews(); // 새로고침
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 닫기
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void filterReviews(String query) {
@@ -105,11 +172,11 @@ class _ReviewPageState extends State<ReviewPage> {
     if (_selectedRating != null) {
       filtered = filtered.where((review) {
         if (_selectedRating == 1) {
-          return review['score'] == 'Good';
+          return review['score'] == 'GOOD';
         } else if (_selectedRating == 2) {
-          return review['score'] == 'So So';
+          return review['score'] == 'SO_SO';
         } else if (_selectedRating == 3) {
-          return review['score'] == 'Bad';
+          return review['score'] == 'BAD';
         }
         return true;
       }).toList();
@@ -119,6 +186,8 @@ class _ReviewPageState extends State<ReviewPage> {
       filteredReviews = filtered;
     });
   }
+
+  // 추가적인 UI 구현이 필요할 수 있습니다.
 
   void toggleLike(int index) {
     setState(() {
@@ -219,12 +288,12 @@ class _ReviewPageState extends State<ReviewPage> {
                       value: selectedOption,
                       items: <String>[
                         'All', // 'All' added here
-                        'Dorm',
-                        'Building',
-                        'Food',
+                        'Dormitory',
+                        'Facility',
+                        'Foods',
                         'Courses',
-                        'Life hack',
-                        'etc',
+                        'Tips',
+                        'Ects'
                       ].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -296,7 +365,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           });
                         },
                       ),
-                      const Text('Good',
+                      const Text('GOOD',
                           style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
@@ -323,7 +392,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           });
                         },
                       ),
-                      const Text('So So',
+                      const Text('SOSO',
                           style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
@@ -349,7 +418,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           });
                         },
                       ),
-                      const Text('Bad',
+                      const Text('BAD',
                           style: TextStyle(fontFamily: 'ggsansBold')),
                     ],
                   ),
@@ -379,176 +448,328 @@ class _ReviewPageState extends State<ReviewPage> {
                   itemBuilder: (context, index) {
                     final review = filteredReviews[index];
 
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Title and action buttons
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Title
-                                Expanded(
-                                  child: Text(
-                                    review['title'],
-                                    style: const TextStyle(
-                                      fontFamily: 'ggsansBold',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true, // Modal을 전체 화면으로 만듦
+                          builder: (BuildContext context) {
+                            return DraggableScrollableSheet(
+                              initialChildSize:
+                                  0.7, // 모달이 열렸을 때 기본 크기 (화면의 70%)
+                              minChildSize: 0.5, // 모달 최소 크기
+                              maxChildSize: 0.9, // 모달 최대 크기
+                              expand: false,
+                              builder: (BuildContext context,
+                                  ScrollController scrollController) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SingleChildScrollView(
+                                    controller: scrollController, // 스크롤 컨트롤러 추가
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 모달에서의 제목
+                                        Text(
+                                          review['title'],
+                                          style: const TextStyle(
+                                            fontFamily: 'ggsansBold',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // 모달에서의 국가, 작성자, 카테고리
+                                        Text('Nation: ${review['nation']}',
+                                            style: TextStyle(
+                                                fontFamily: 'ggsansBold')),
+                                        Text('Author: ${review['author']}',
+                                            style: TextStyle(
+                                                fontFamily: 'ggsansBold')),
+                                        Text('Category: ${review['category']}',
+                                            style: TextStyle(
+                                                fontFamily: 'ggsansBold')),
+                                        Text('Date: ${review['date']}',
+                                            style: TextStyle(
+                                                fontFamily: 'ggsansBold')),
+                                        const SizedBox(height: 8),
+                                        // 모달에서의 평점 (아이콘 포함)
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              review['score'] == 'GOOD'
+                                                  ? Icons
+                                                      .sentiment_very_satisfied
+                                                  : review['score'] == 'SOSO'
+                                                      ? Icons.sentiment_neutral
+                                                      : Icons
+                                                          .sentiment_very_dissatisfied,
+                                              color: review['score'] == 'GOOD'
+                                                  ? Colors.green
+                                                  : review['score'] == 'SOSO'
+                                                      ? Colors.orange
+                                                      : Colors.red,
+                                              size: 16,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              review['score'].toString(),
+                                              style: TextStyle(
+                                                color: review['score'] == 'GOOD'
+                                                    ? Colors.green
+                                                    : review['score'] == 'SOSO'
+                                                        ? Colors.orange
+                                                        : Colors.red,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // 모달에서의 상세 정보
+                                        Text(
+                                          '${review['detail']}',
+                                          style: TextStyle(
+                                              fontFamily: 'ggsansBold'),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        // 모달에서 이미지 슬라이더
+                                        SizedBox(
+                                          height: 150,
+                                          child: PageView.builder(
+                                            itemCount: review['images'].length,
+                                            itemBuilder: (context, imageIndex) {
+                                              return Image.network(
+                                                review['images'][imageIndex],
+                                                fit: BoxFit.cover,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        // 모달에서 좋아요/싫어요 버튼
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.thumb_up,
+                                                color: review['liked']
+                                                    ? Colors.blue
+                                                    : Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                toggleLike(index);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            Text(review['likes'].toString()),
+                                            const SizedBox(width: 16),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.thumb_down,
+                                                color: review['disliked']
+                                                    ? Colors.red
+                                                    : Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                toggleDislike(index);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            Text(review['dislikes'].toString()),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                // Edit and Delete buttons
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.blue),
-                                      onPressed: () {
-                                        // Navigate to the review update screen
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ReviewUpdateScreen(
-                                              reviewId: review['id'],
-                                              // Pass other review data if needed
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Title and action buttons
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Title
+                                  Expanded(
+                                    child: Text(
+                                      review['title'],
+                                      style: const TextStyle(
+                                        fontFamily: 'ggsansBold',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  // Edit and Delete buttons
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit,
+                                            color: Colors.blue),
+                                        onPressed: () {
+                                          // Navigate to the review update screen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ReviewUpdateScreen(
+                                                reviewId: review['id'],
+                                                // Pass other review data if needed
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
-                                      onPressed: () {
-                                        // Delete action
-                                        setState(() {
-                                          filteredReviews.removeAt(index);
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            // Nation, Author, and Category
-                            Text(
-                              'Nation: ${review['nation']}',
-                              style: TextStyle(fontFamily: 'ggsansBold'),
-                            ),
-                            Text('Author: ${review['author']}',
-                                style: TextStyle(fontFamily: 'ggsansBold')),
-                            Text('Category: ${review['category']}',
-                                style: TextStyle(fontFamily: 'ggsansBold')),
-                            Text('Date: ${review['date']}',
-                                style: TextStyle(fontFamily: 'ggsansBold')),
-                            const SizedBox(height: 8),
-                            // Score
-// Score Row 수정 부분
-                            Row(
-                              children: [
-                                Icon(
-                                  review['score'] == 'Good'
-                                      ? Icons.sentiment_very_satisfied
-                                      : review['score'] == 'So So'
-                                          ? Icons.sentiment_neutral
-                                          : Icons.sentiment_very_dissatisfied,
-                                  color: review['score'] == 'Good'
-                                      ? Colors.green
-                                      : review['score'] == 'So So'
-                                          ? Colors.orange
-                                          : Colors.red,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4), // 아이콘과 텍스트 사이 간격 추가
-                                Text(
-                                  review['score'].toString(),
-                                  style: TextStyle(
-                                    color: review['score'] == 'Good'
+                                          );
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          // Delete action
+                                          _deleteReview(
+                                              review['id']
+                                                  .toString(), // ID를 String으로 변환
+                                              review['userId']
+                                                  .toString() // userId를 String으로 변환
+                                              );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              // Nation, Author, and Category
+                              Text(
+                                'Nation: ${review['nation']}',
+                                style: TextStyle(fontFamily: 'ggsansBold'),
+                              ),
+                              Text('Author: ${review['author']}',
+                                  style: TextStyle(fontFamily: 'ggsansBold')),
+                              Text('Category: ${review['category']}',
+                                  style: TextStyle(fontFamily: 'ggsansBold')),
+                              Text('Date: ${review['date']}',
+                                  style: TextStyle(fontFamily: 'ggsansBold')),
+                              const SizedBox(height: 8),
+                              // Score
+                              Row(
+                                children: [
+                                  Icon(
+                                    review['score'] == 'GOOD'
+                                        ? Icons.sentiment_very_satisfied
+                                        : review['score'] == 'SOSO'
+                                            ? Icons.sentiment_neutral
+                                            : Icons.sentiment_very_dissatisfied,
+                                    color: review['score'] == 'GOOD'
                                         ? Colors.green
-                                        : review['score'] == 'So So'
+                                        : review['score'] == 'SOSO'
                                             ? Colors.orange
                                             : Colors.red,
+                                    size: 16,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            // Detail
-                            Text('Detail: ${review['detail']}',
-                                style: TextStyle(fontFamily: 'ggsansBold')),
-                            const SizedBox(height: 12),
-
-                            // Image slider with image count in the top-right corner
-                            SizedBox(
-                              height: 150,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    itemCount: review['images'].length,
-                                    itemBuilder: (context, imageIndex) {
-                                      return Image.network(
-                                        review['images'][imageIndex],
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                  ),
-                                  Positioned(
-                                    right: 8,
-                                    top: 8,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        '${review['images'].length} images',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
-                                      ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    review['score'].toString(),
+                                    style: TextStyle(
+                                      color: review['score'] == 'GOOD'
+                                          ? Colors.green
+                                          : review['score'] == 'SOSO'
+                                              ? Colors.orange
+                                              : Colors.red,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            // Like/Dislike buttons
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.thumb_up,
-                                    color: review['liked']
-                                        ? Colors.blue
-                                        : Colors.grey,
-                                  ),
-                                  onPressed: () => toggleLike(index),
+                              const SizedBox(height: 8),
+                              // Detail
+                              Text(
+                                '${review['detail']}',
+                                style: TextStyle(fontFamily: 'ggsansBold'),
+                                maxLines: 5, // 최대 5줄까지 표시
+                                overflow:
+                                    TextOverflow.ellipsis, // 5줄 이상일 경우 ... 표시
+                              ),
+                              const SizedBox(height: 12),
+                              // Image slider with image count in the top-right corner
+                              SizedBox(
+                                height: 150,
+                                child: Stack(
+                                  children: [
+                                    PageView.builder(
+                                      itemCount: review['images'].length,
+                                      itemBuilder: (context, imageIndex) {
+                                        return Image.network(
+                                          review['images'][imageIndex],
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    ),
+                                    Positioned(
+                                      right: 8,
+                                      top: 8,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4, horizontal: 8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          '${review['images'].length} images',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(review['likes'].toString()),
-                                const SizedBox(width: 16),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.thumb_down,
-                                    color: review['disliked']
-                                        ? Colors.red
-                                        : Colors.grey,
+                              ),
+                              const SizedBox(height: 12),
+                              // Like/Dislike buttons
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: review['liked']
+                                          ? Colors.blue
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () => toggleLike(index),
                                   ),
-                                  onPressed: () => toggleDislike(index),
-                                ),
-                                Text(review['dislikes'].toString()),
-                              ],
-                            ),
-                          ],
+                                  Text(review['likes'].toString()),
+                                  const SizedBox(width: 16),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: review['disliked']
+                                          ? Colors.red
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () => toggleDislike(index),
+                                  ),
+                                  Text(review['dislikes'].toString()),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

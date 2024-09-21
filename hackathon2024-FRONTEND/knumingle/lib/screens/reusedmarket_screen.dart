@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:knumingle/components/underbar.dart';
+import 'package:knumingle/constants/url.dart';
 import 'package:knumingle/screens/myaccount_screen.dart';
-import 'reusedmarketregister_screen.dart'; // ReusedMarketRegisterScreen을 불러옴
-import 'reusedmarketdetail_screen.dart'; // ReusedMarketDetailScreen을 불러옴
+import 'reusedmarketregister_screen.dart';
+import 'reusedmarketdetail_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReusedMarketPage extends StatefulWidget {
   const ReusedMarketPage({super.key});
@@ -12,53 +16,95 @@ class ReusedMarketPage extends StatefulWidget {
 }
 
 class _ReusedMarketPageState extends State<ReusedMarketPage> {
-  // 게시판 아이템 데이터
-  final List<Map<String, String>> items = [
-    {
-      'id': '1',
-      'title': 'Used Bicycle for Sale',
-      'author': 'John Doe',
-      'nation': 'USA'
-    },
-    {
-      'id': '2',
-      'title': 'Second-hand Laptop',
-      'author': 'Jane Smith',
-      'nation': 'Canada'
-    },
-    {
-      'id': '3',
-      'title': 'Furniture Giveaway',
-      'author': 'Alex Johnson',
-      'nation': 'UK'
-    },
-    {
-      'id': '4',
-      'title': 'Old Textbooks',
-      'author': 'Chris Lee',
-      'nation': 'South Korea'
-    },
-    {
-      'id': '5',
-      'title': 'Affordable Guitar',
-      'author': 'Emma Williams',
-      'nation': 'Australia'
-    },
-  ];
+  List<Map<String, dynamic>> items = [];
+  List<String> nations = []; // Nation 목록을 저장할 리스트
+  String? selectedNation = 'All';
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
-  String? selectedNation = 'All'; // 기본값을 All로 설정
-  final TextEditingController searchController =
-      TextEditingController(); // 검색 필드를 위한 컨트롤러
-  String searchQuery = ''; // 검색어를 저장하는 변수
+  @override
+  void initState() {
+    super.initState();
+    _fetchMarketItems(); // 데이터 가져오기
+    _fetchNations(); // Nation 목록 가져오기
+  }
+
+  Future<void> _fetchMarketItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      print('No token found.');
+      return;
+    }
+
+    final url = '${ApiAddress}/market'; // API URL
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      setState(() {
+        items = responseData.map((item) {
+          return {
+            'id': item['id'].toString(),
+            'title': item['title'],
+            'author':
+                '${item['user']['first_name']} ${item['user']['last_name']}',
+            'nation': item['user']['nation'],
+          };
+        }).toList();
+      });
+    } else {
+      print('Error fetching market items: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _fetchNations() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      print('No token found.');
+      return;
+    }
+
+    final url = '${ApiAddress}/lists/nations'; // API URL for nations
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token', // Token 추가
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // API 응답이 문자열 리스트인 경우
+      final List<dynamic> responseData = jsonDecode(response.body);
+      print(responseData);
+
+      setState(() {
+        nations = List<String>.from(responseData); // 문자열 리스트로 변환
+        nations.insert(0, 'All'); // "All" 옵션 추가
+      });
+
+      print(nations);
+    } else {
+      print('Error fetching nations: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 선택된 Nation과 검색어에 따라 필터링된 아이템을 보여줌
-    List<Map<String, String>> filteredItems = items.where((item) {
+    List<Map<String, dynamic>> filteredItems = items.where((item) {
       final isNationMatch =
           selectedNation == 'All' || item['nation'] == selectedNation;
       final isSearchMatch =
-          item['title']!.toLowerCase().contains(searchQuery.toLowerCase());
+          item['title']?.toLowerCase().contains(searchQuery.toLowerCase()) ??
+              false;
       return isNationMatch && isSearchMatch;
     }).toList();
 
@@ -85,7 +131,7 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        searchQuery = value; // 검색어가 변경될 때마다 상태 갱신
+                        searchQuery = value;
                       });
                     },
                   ),
@@ -93,7 +139,6 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // My Account 버튼 클릭 시 동작
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -116,17 +161,19 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                   child: DropdownButton<String>(
                     hint: const Text('Nation'),
                     value: selectedNation,
-                    items: <String>[
-                      'All', // "All" 추가
-                      'USA',
-                      'Canada',
-                      'UK',
-                      'South Korea',
-                      'Australia'
-                    ].map((String value) {
+                    items: nations.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Container(
+                          constraints: const BoxConstraints(
+                              maxWidth: 150), // Set maxWidth
+                          child: Text(
+                            value,
+                            overflow: TextOverflow
+                                .ellipsis, // Add ellipsis for overflow
+                            maxLines: 1, // Limit to one line
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -139,7 +186,6 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // Register 버튼 클릭 시 ReusedMarketRegisterScreen으로 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -200,63 +246,78 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
 
             // 게시판 목록 (리스트뷰)
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // 해당 게시물 클릭 시 ReusedMarketDetailScreen으로 이동
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReusedMarketDetailScreen(
-                            itemId: filteredItems[index]['id']!,
+              child: filteredItems.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 30.0), // 위쪽에 16px 여백 추가
+                        child: Text(
+                          'No reviews available',
+                          style: TextStyle(
+                            fontFamily: 'ggsansBold',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey, // 글자 색을 회색으로 설정
                           ),
                         ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              filteredItems[index]['id'] ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontFamily: 'ggsansBold'),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              filteredItems[index]['title'] ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontFamily: 'ggsansBold'),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              filteredItems[index]['author'] ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontFamily: 'ggsansBold'),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              filteredItems[index]['nation'] ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontFamily: 'ggsansBold'),
-                            ),
-                          ),
-                        ],
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReusedMarketDetailScreen(
+                                  itemId: filteredItems[index]['id']!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    filteredItems[index]['id'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontFamily: 'ggsansBold'),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    filteredItems[index]['title'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontFamily: 'ggsansBold'),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    filteredItems[index]['author'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontFamily: 'ggsansBold'),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    filteredItems[index]['nation'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontFamily: 'ggsansBold'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),

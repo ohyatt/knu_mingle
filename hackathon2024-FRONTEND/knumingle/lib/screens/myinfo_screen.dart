@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:knumingle/constants/url.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyInfoPage extends StatefulWidget {
   const MyInfoPage({super.key});
@@ -11,41 +15,101 @@ class _MyInfoPageState extends State<MyInfoPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController nationController = TextEditingController();
 
-  bool isEditable = false; // 필드의 입력 가능 여부를 제어하는 변수
-  bool isUpdateEnabled = false; // Update 버튼 활성화 여부
+  String? selectedNation;
+  String? selectedFaculty;
+  bool isEditable = false;
+  bool isUpdateEnabled = false;
+
+  List<String> nations = [];
+  List<String> faculties = [];
 
   // 모든 입력란이 채워졌는지 확인하는 함수
   void checkIfAllFieldsFilled() {
     setState(() {
-      // 모든 필드가 비어있지 않으면 Update 버튼을 활성화
       isUpdateEnabled = firstNameController.text.isNotEmpty &&
           lastNameController.text.isNotEmpty &&
-          nationController.text.isNotEmpty &&
-          emailController.text.isNotEmpty;
+          selectedNation != null &&
+          selectedFaculty != null;
     });
   }
 
   @override
   void initState() {
     super.initState();
-
-    // 입력 필드 값이 변경될 때마다 확인
     firstNameController.addListener(checkIfAllFieldsFilled);
     lastNameController.addListener(checkIfAllFieldsFilled);
-    nationController.addListener(checkIfAllFieldsFilled);
-    emailController.addListener(checkIfAllFieldsFilled);
+    _fetchUserInfo(); // 사용자 정보 가져오기
+    _fetchNations(); // 국가 목록 가져오기
+    _fetchFaculties(); // 학부 목록 가져오기
   }
 
   @override
   void dispose() {
-    // 리스너 해제
     firstNameController.dispose();
     lastNameController.dispose();
-    nationController.dispose();
     emailController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      print('No token found.');
+      return;
+    }
+
+    final url = '${ApiAddress}/mypage'; // 사용자 정보 API URL
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+      final data = jsonDecode(response.body);
+      setState(() {
+        emailController.text = data['email'];
+        firstNameController.text = data['first_name'];
+        lastNameController.text = data['last_name'];
+        selectedNation = data['nation'];
+        selectedFaculty = data['faculty'];
+      });
+    } else {
+      print('Error fetching user info: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _fetchNations() async {
+    final url = '${ApiAddress}/lists/nations'; // 국가 목록 API URL
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        nations = List<String>.from(data);
+      });
+    } else {
+      print('Error fetching nations: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _fetchFaculties() async {
+    final url = '${ApiAddress}/lists/faculties'; // 학부 목록 API URL
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        faculties = List<String>.from(data);
+      });
+    } else {
+      print('Error fetching faculties: ${response.statusCode}');
+    }
   }
 
   @override
@@ -58,17 +122,16 @@ class _MyInfoPageState extends State<MyInfoPage> {
           ElevatedButton(
             onPressed: () {
               setState(() {
-                // Edit 버튼 클릭 시 입력 가능 여부를 토글
                 isEditable = !isEditable;
               });
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, // 버튼 배경색 검은색
+              backgroundColor: Colors.black,
             ),
             child: const Text(
-              'Edit', // 항상 Edit 버튼만 표시
+              'Edit',
               style: TextStyle(
-                color: Colors.white, // 글자색은 하얀색
+                color: Colors.white,
                 fontFamily: 'ggsansBold',
               ),
             ),
@@ -87,7 +150,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
-              enabled: false, // Email 필드는 항상 비활성화 상태
+              enabled: false,
             ),
             const SizedBox(height: 16),
             TextField(
@@ -97,7 +160,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 labelText: 'First Name',
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditable, // Edit 모드에서만 활성화
+              enabled: isEditable,
             ),
             const SizedBox(height: 16),
             TextField(
@@ -107,29 +170,65 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 labelText: 'Last Name',
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditable, // Edit 모드에서만 활성화
+              enabled: isEditable,
             ),
             const SizedBox(height: 16),
-            TextField(
-              style: const TextStyle(fontFamily: 'ggsansBold'),
-              controller: nationController,
+
+            // Nation 드롭다운
+            DropdownButtonFormField<String>(
+              value: selectedNation,
+              items: nations.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: isEditable
+                  ? (String? newValue) {
+                      setState(() {
+                        selectedNation = newValue;
+                        checkIfAllFieldsFilled();
+                      });
+                    }
+                  : null,
               decoration: const InputDecoration(
                 labelText: 'Nation',
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditable, // Edit 모드에서만 활성화
             ),
-            const Spacer(), // 아래쪽 버튼을 맨 밑으로 내림
+            const SizedBox(height: 16),
+
+            // Faculty 드롭다운
+            DropdownButtonFormField<String>(
+              value: selectedFaculty,
+              items: faculties.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: isEditable
+                  ? (String? newValue) {
+                      setState(() {
+                        selectedFaculty = newValue;
+                        checkIfAllFieldsFilled();
+                      });
+                    }
+                  : null,
+              decoration: const InputDecoration(
+                labelText: 'Faculty',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: isUpdateEnabled
                   ? () {
                       // Update 버튼 액션: 입력된 값으로 계정 정보 업데이트 로직 추가
                     }
-                  : null, // 모든 필드가 채워져 있지 않으면 버튼 비활성화
+                  : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isUpdateEnabled
-                    ? Colors.blue
-                    : Colors.grey, // 활성화 여부에 따른 색상 변화
+                backgroundColor: isUpdateEnabled ? Colors.blue : Colors.grey,
               ),
               child: const Text(
                 'Update',

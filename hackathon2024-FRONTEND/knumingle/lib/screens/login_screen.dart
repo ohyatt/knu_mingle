@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:knumingle/constants/url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import 'package:knumingle/screens/findpw_screen.dart';
 import 'package:knumingle/screens/review_screen.dart';
 import 'package:knumingle/screens/userregister_screen.dart'; // UserRegisterScreen import
@@ -22,11 +26,35 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _validateEmail() {
-    if (!_idController.text.contains('@')) {
-      _showErrorDialog('Invalid email format.'); // 이메일 형식이 잘못된 경우 에러 다이얼로그
+  Future<void> _login() async {
+    final url = '${ApiAddress}/auth/login'; // ApiAddress 주소로 변경하세요
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'email': _idController.text,
+        'password': _pwController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final String token = responseData['token'];
+      final dynamic userIdValue = responseData['userId'];
+      final String userId = userIdValue.toString(); // String으로 변환
+
+      // 로컬 스토리지에 저장
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      await prefs.setString('userId', userId);
+      print(token);
+      _showSuccessDialog();
     } else {
-      _showSuccessDialog(); // 로그인 성공 다이얼로그 표시
+      print(response.statusCode);
+      _showErrorDialog(
+          'Login failed. Please check your Email and PW'); // 로그인 실패 메시지
     }
   }
 
@@ -55,12 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Success',
-          ),
-          content: const Text(
-            'Logged in successfully.',
-          ),
+          title: const Text('Success'),
+          content: const Text('Logged in successfully.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -91,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Image.asset(
                 'assets/images/login_logo.png', // 이미지 사용
-                width: 350, // 원하는 크기로 조정
+                width: 350,
                 height: 350,
               ),
               const SizedBox(height: 0),
@@ -130,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: _isOkButtonEnabled
                           ? () {
-                              _validateEmail(); // 이메일 유효성 검사 후 로그인 진행
+                              _login(); // 로그인 메서드 호출
                             }
                           : null,
                       child: const Text(
@@ -158,7 +182,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(fontFamily: 'ggsansBold'))),
                   ElevatedButton(
                     onPressed: () {
-                      // User Register 버튼 클릭 시 UserRegisterScreen으로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
