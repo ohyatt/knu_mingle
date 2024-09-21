@@ -33,12 +33,17 @@ public class ImageService {
 
     public void updateMarketImage(Market market, List<String> images) {
         Image existingImage = imageRepository.findByMarket(market);
-        existingImage.setPath(images);
-        imageRepository.save(existingImage);
+        if (existingImage != null) {
+            existingImage.setPath(images);
+            imageRepository.save(existingImage);
+        }
+        else{
+            imageRepository.save(createMarketImage(market, images));
+        }
     }
 
     public Image getImageByMarket(Market market) {
-        return (Image) imageRepository.findByMarket(market);
+        return imageRepository.findByMarket(market);
     }
 
     public Image createReviewImage(Review review, List<String> images) {
@@ -53,10 +58,13 @@ public class ImageService {
     public void updateReviewImage(Review review, List<String> images) {
         // 기존 이미지 리스트를 가져옴
         Image existingImage = imageRepository.findByReview(review);
-        existingImage.setPath(images);
-
-        // 모든 변경 사항을 데이터베이스에 저장합니다.
-        imageRepository.save(existingImage);
+        if (existingImage != null) {
+            existingImage.setPath(images);
+            imageRepository.save(existingImage);
+        }
+        else{
+            imageRepository.save(createReviewImage(review, images));
+        }
     }
 
     public Image getImageByReview(Review review) {
