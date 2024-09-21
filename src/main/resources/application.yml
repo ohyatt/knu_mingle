@@ -16,9 +16,10 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
-    h2:
-      console:
-        enabled: true  # H2 콘솔 활성화
+
+  h2:
+    console:
+      enabled: true  # H2 콘솔 활성화
 
     #driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://localhost:3306/knu_mingle_db?serverTimezone=UTC&useSSL=false
