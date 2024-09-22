@@ -35,11 +35,19 @@ public class MarketCommentResponse {
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
         this.user_id = comment.getUser().getId();
-        this.first_name = comment.getUser().getFirst_name();
-        this.last_name = comment.getUser().getLast_name();
         this.gender = comment.getUser().getGender();
-        this.email = comment.getUser().getEmail();
         this.nation = comment.getUser().getNation();
         this.faculty = comment.getUser().getFaculty();
+
+        if(comment.getContent().equals("deleted comment")){
+            this.first_name = "deleted";
+            this.last_name = "deleted";
+            this.email = "deleted";
+        }
+        else{
+            this.first_name = comment.getUser().getFirst_name();
+            this.last_name = comment.getUser().getLast_name();
+            this.email = comment.getUser().getEmail();
+        }
     }
 }

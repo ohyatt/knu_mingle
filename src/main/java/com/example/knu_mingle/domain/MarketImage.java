@@ -20,6 +20,7 @@ public class MarketImage {
     @JoinColumn(name = "market_id", nullable = false)
     private Market market;
 
-    @Column(name = "path",nullable = false)
+    @ElementCollection
+    @Column(name = "path")
     private List<String> path;
 }

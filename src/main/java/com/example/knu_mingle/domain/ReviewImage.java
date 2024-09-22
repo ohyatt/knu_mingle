@@ -20,6 +20,7 @@ public class ReviewImage {
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
-    @Column(name = "path",nullable = false)
+    @ElementCollection
+    @Column(name = "path")
     private List<String> path;
 }

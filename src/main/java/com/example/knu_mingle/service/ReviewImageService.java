@@ -17,20 +17,15 @@ public class ReviewImageService {
         ReviewImage image = new ReviewImage();
         image.setReview(review);
         image.setPath(images);
-
+        reviewImageRepository.save(image);
         return image;
     }
 
     public void updateReviewImage(Review review, List<String> images) {
         // 기존 이미지 리스트를 가져옴
         ReviewImage existingImage = reviewImageRepository.findByReview(review);
-        if (existingImage != null) {
-            existingImage.setPath(images);
-            reviewImageRepository.save(existingImage);
-        }
-        else{
-            reviewImageRepository.save(createReviewImage(review, images));
-        }
+        existingImage.setPath(images);
+        reviewImageRepository.save(existingImage);
     }
 
     public ReviewImage getImageByReview(Review review) {

@@ -62,7 +62,7 @@ public class CommentService {
         if (!comment.getUser().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this comment.");
         }
-        comment.setContent("삭제된 댓글입니다.");
+        comment.setContent("deleted comment");
         // 더미 유저 넣어야함 그 로직 까먹지 말기 디비에 넣어야댐
         commentRepository.save(comment);
         return "Success";
