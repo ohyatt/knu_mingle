@@ -92,13 +92,16 @@ KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 A
 1. ERD
 2. 회원가입(메일 유효성 검사), 일반 로그인 -> 인증, JWT 토큰 -> 인가
 
-3. 리뷰 게시판
-경북대학교와 한국에서의 생활에 대한 정보를 자유롭게 '리뷰'형식으로 공유하는 게시판
-주요 키워드 6개(Dormitory, Facility, Foods, Courses, Tips, Ects) 기준으로 리뷰 등록 및 조회
-리뷰 등록자는 해당 리뷰에 대한 본인의 감정을 Good, So-so, Bad로 표현 가능
-<img width="726" alt="스크린샷 2024-09-22 오전 9 26 13" src="https://github.com/user-attachments/assets/ee28782d-7c4c-4d71-b617-51c1319da597">
-리뷰 조회자들은 해당 리뷰에 대해 Like, Dislike로 평가 가능
-<img width="726" alt="스크린샷 2024-09-22 오전 10 22 51" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
+3. 리뷰 게시판<br>
+경북대학교와 한국에서의 생활에 대한 정보를 자유롭게 '리뷰'형식으로 공유하는 게시판<br>
+주요 키워드 6개(Dormitory, Facility, Foods, Courses, Tips, Ects) 기준으로 리뷰 등록 및 조회<br>
+<p>
+    <img width="1453" alt="스크린샷 2024-09-22 오전 10 17 04" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
+</p>
+리뷰 조회자들은 해당 리뷰에 대해 Like, Dislike로 평가 가능><br>
+<p>
+    <img width="726" alt="스크린샷 2024-09-22 오전 10 22 51" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
+</p>
 5. 장터 게시판
 
 6. 공공데이터 활용
