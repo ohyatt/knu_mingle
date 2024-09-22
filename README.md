@@ -73,6 +73,9 @@ KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 A
             <li>팀원들 중 교환학생을 경험한 학생들의 의견을 바탕으로, 외국인 학생들을 위한 정보 공유 커뮤니티가 필요하다는 아이디어가 제시되었습니다.</li>
             <li>실제로 KNU 버디 프로그램에서 같은 국적의 학생을 연결해 달라는 요청을 받은 경험이 바탕이 되어, 외국인 학생 간의 네트워크가 중요하다는 인식이 생겼습니다.</li>
         </ul>
+        <p align="center">
+            <img src="https://github.com/user-attachments/assets/e1b943c8-7eb7-438a-be8b-08d7f576da68" alt="Logo" width="50%"/>
+        </p>
     </li>
 </ol>
 
