@@ -55,7 +55,8 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
             'title': item['title'],
             'author':
                 '${item['user']['first_name']} ${item['user']['last_name']}',
-            'nation': item['user']['nation'],
+            'nation': item['user']['nation'].replaceAll('_', ' '),
+            'status': item['status']
           };
         }).toList();
       });
@@ -192,7 +193,13 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                         builder: (context) =>
                             const ReusedMarketRegisterScreen(),
                       ),
-                    );
+                    ).then((shouldRefresh) {
+                      if (shouldRefresh == true) {
+                        setState(() {
+                          _fetchMarketItems();
+                        });
+                      }
+                    });
                   },
                   child: const Text('Register',
                       style: TextStyle(fontFamily: 'ggsansBold')),
@@ -225,6 +232,15 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                 Expanded(
                   flex: 2,
                   child: Text(
+                    'Status', // 새 Status 열 추가
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'ggsansBold'),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
                     'Author',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -249,15 +265,14 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
               child: filteredItems.isEmpty
                   ? Center(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 30.0), // 위쪽에 16px 여백 추가
+                        padding: const EdgeInsets.only(top: 30.0),
                         child: Text(
                           'No reviews available',
                           style: TextStyle(
                             fontFamily: 'ggsansBold',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey, // 글자 색을 회색으로 설정
+                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -274,7 +289,13 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                                   itemId: filteredItems[index]['id']!,
                                 ),
                               ),
-                            );
+                            ).then((shouldRefresh) {
+                              if (shouldRefresh == true) {
+                                setState(() {
+                                  _fetchMarketItems();
+                                });
+                              }
+                            });
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -292,6 +313,15 @@ class _ReusedMarketPageState extends State<ReusedMarketPage> {
                                   flex: 3,
                                   child: Text(
                                     filteredItems[index]['title'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontFamily: 'ggsansBold'),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    filteredItems[index]['status'] ??
+                                        '', // Status 추가
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontFamily: 'ggsansBold'),
                                   ),

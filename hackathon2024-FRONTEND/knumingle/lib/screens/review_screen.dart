@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:knumingle/components/underbar.dart';
 import 'package:knumingle/constants/url.dart';
 import 'package:knumingle/screens/myaccount_screen.dart';
@@ -52,27 +53,28 @@ class _ReviewPageState extends State<ReviewPage> {
     if (response.statusCode == 200) {
       print(response.statusCode);
       final List<dynamic> responseData = jsonDecode(response.body);
+      print(responseData);
       setState(() {
         reviews = responseData.map((item) {
           return {
             'id': item['id'],
             'title': item['title'],
-            'nation': item['user']['nation'],
+            'nation': item['userInfoDto']['nation'],
             'author':
-                '${item['user']['first_name']} ${item['user']['last_name']}',
+                '${item['userInfoDto']['first_name']} ${item['userInfoDto']['last_name']}',
             'category': item['keyword'], // Assuming this maps to the category
             'score': item['reaction'], // Assuming this maps to the score
             'detail': item['content'],
             'date': item['createdAt'],
-            'images': [], // Adjust this if you have image URLs
+            'images': List<String>.from(
+                item['imageUrl']), // 이미지 URL 리스트를 List<String>으로 변환
             'likes': 0,
             'dislikes': 0,
             'liked': false,
             'disliked': false,
-            'userId': item['user']['id']
+            'userId': item['userInfoDto']['id']
           };
         }).toList();
-        print(reviews);
         filteredReviews = reviews; // 초기 상태에서 필터링된 리뷰도 동일하게 설정
       });
     } else {
@@ -174,7 +176,7 @@ class _ReviewPageState extends State<ReviewPage> {
         if (_selectedRating == 1) {
           return review['score'] == 'GOOD';
         } else if (_selectedRating == 2) {
-          return review['score'] == 'SO_SO';
+          return review['score'] == 'SOSO';
         } else if (_selectedRating == 3) {
           return review['score'] == 'BAD';
         }
@@ -230,6 +232,11 @@ class _ReviewPageState extends State<ReviewPage> {
         filteredReviews.sort((a, b) => b['likes'].compareTo(a['likes']));
       }
     });
+  }
+
+  String _formatDate(String dateString) {
+    final DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime); // 원하는 형식으로 변경
   }
 
   @override
@@ -491,7 +498,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                         Text('Category: ${review['category']}',
                                             style: TextStyle(
                                                 fontFamily: 'ggsansBold')),
-                                        Text('Date: ${review['date']}',
+                                        Text(
+                                            'Date: ${_formatDate(review['date'])}',
                                             style: TextStyle(
                                                 fontFamily: 'ggsansBold')),
                                         const SizedBox(height: 8),
@@ -620,31 +628,93 @@ class _ReviewPageState extends State<ReviewPage> {
                                       IconButton(
                                         icon: const Icon(Icons.edit,
                                             color: Colors.blue),
-                                        onPressed: () {
-                                          // Navigate to the review update screen
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ReviewUpdateScreen(
-                                                reviewId: review['id'],
-                                                // Pass other review data if needed
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          final String? userId =
+                                              prefs.getString(
+                                                  'userId'); // 사용자 ID 가져오기
+                                          print(userId);
+                                          print(review['userId']);
+                                          if (userId ==
+                                              review['userId'].toString()) {
+                                            // 사용자 ID가 일치하는 경우 ReviewUpdateScreen으로 이동
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReviewUpdateScreen(
+                                                  reviewId: review['id'],
+                                                  // 필요한 다른 리뷰 데이터도 전달
+                                                ),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          } else {
+                                            // 권한이 없다는 모달 표시
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Permission Denied'),
+                                                  content: const Text(
+                                                      'Permission Denied'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // 다이얼로그 닫기
+                                                      },
+                                                      child: const Text('확인'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
                                         },
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.delete,
                                             color: Colors.red),
-                                        onPressed: () {
-                                          // Delete action
-                                          _deleteReview(
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          final String? userId =
+                                              prefs.getString(
+                                                  'userId'); // 사용자 ID 가져오기
+
+                                          if (userId ==
+                                              review['userId'].toString()) {
+                                            // 사용자 ID가 일치하는 경우 삭제 함수 호출
+                                            _deleteReview(
                                               review['id']
                                                   .toString(), // ID를 String으로 변환
-                                              review['userId']
-                                                  .toString() // userId를 String으로 변환
-                                              );
+                                              userId!, // userId를 String으로 변환
+                                            );
+                                          } else {
+                                            // 권한이 없다는 모달 표시
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Permission Denied'),
+                                                  content: const Text(
+                                                      'Permission Denied.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // 다이얼로그 닫기
+                                                      },
+                                                      child: const Text('확인'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
                                         },
                                       ),
                                     ],
@@ -661,7 +731,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                   style: TextStyle(fontFamily: 'ggsansBold')),
                               Text('Category: ${review['category']}',
                                   style: TextStyle(fontFamily: 'ggsansBold')),
-                              Text('Date: ${review['date']}',
+                              Text('Date: ${_formatDate(review['date'])}',
                                   style: TextStyle(fontFamily: 'ggsansBold')),
                               const SizedBox(height: 8),
                               // Score
@@ -711,7 +781,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                     PageView.builder(
                                       itemCount: review['images'].length,
                                       itemBuilder: (context, imageIndex) {
-                                        return Image.network(
+                                        return Image.asset(
                                           review['images'][imageIndex],
                                           fit: BoxFit.cover,
                                         );

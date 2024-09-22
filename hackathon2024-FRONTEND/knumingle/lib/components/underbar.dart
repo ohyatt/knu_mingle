@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:knumingle/screens/reusedmarket_screen.dart';
 import 'package:knumingle/screens/map_screen.dart';
 import 'package:knumingle/screens/review_screen.dart';
+import 'package:knumingle/screens/guide_screen.dart'; // Import your Guide Book screen
 
 class UnderBar extends StatefulWidget {
   final BuildContext parentContext;
@@ -33,6 +34,9 @@ class _UnderBarState extends State<UnderBar> {
       case '/map':
         _currentIndex = 2;
         break;
+      case '/guidebook': // Add case for Guide Book
+        _currentIndex = 3;
+        break;
       default:
         _currentIndex = 0;
     }
@@ -42,8 +46,8 @@ class _UnderBarState extends State<UnderBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
-      selectedItemColor: Colors.red, // 선택된 아이템의 색상
-      unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
+      selectedItemColor: Colors.red,
+      unselectedItemColor: Colors.grey,
       onTap: (int index) {
         setState(() {
           _currentIndex = index;
@@ -86,33 +90,47 @@ class _UnderBarState extends State<UnderBar> {
               );
             }
             break;
+          case 3: // Handle Guide Book
+            if (currentRoute != '/guide') {
+              Navigator.pushReplacement(
+                widget.parentContext,
+                MaterialPageRoute(
+                  builder: (context) => GuideScreen(), // Your Guide Book page
+                  settings: const RouteSettings(name: '/guidebook'),
+                ),
+              );
+            }
+            break;
         }
       },
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(
             Icons.preview,
-            color:
-                _currentIndex == 0 ? Colors.red : Colors.grey, // 리뷰 페이지일 때 빨간색
+            color: _currentIndex == 0 ? Colors.red : Colors.grey,
           ),
           label: 'Review',
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.list,
-            color: _currentIndex == 1
-                ? Colors.red
-                : Colors.grey, // Reused Market 페이지일 때 빨간색
+            Icons.shopping_cart,
+            color: _currentIndex == 1 ? Colors.red : Colors.grey,
           ),
           label: 'Market',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.map,
-            color:
-                _currentIndex == 2 ? Colors.red : Colors.grey, // Map 페이지일 때 빨간색
+            color: _currentIndex == 2 ? Colors.red : Colors.grey,
           ),
           label: 'Map',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.book, // Icon for Guide Book
+            color: _currentIndex == 3 ? Colors.red : Colors.grey,
+          ),
+          label: 'Guide Book', // Label for Guide Book
         ),
       ],
     );

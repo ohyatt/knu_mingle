@@ -1,6 +1,10 @@
-import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:knumingle/constants/url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 class ReviewUpdateScreen extends StatefulWidget {
   final int reviewId;
@@ -20,6 +24,156 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
   final ImagePicker _picker = ImagePicker();
 
   @override
+  void initState() {
+    super.initState();
+    _fetchReviewData(); // 리뷰 데이터 가져오기
+  }
+
+  Future<void> _fetchReviewData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final url = '${ApiAddress}/review/${widget.reviewId}';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> reviewData = json.decode(response.body);
+        print(reviewData);
+
+        // Reaction 값 변환 (GOOD -> 1, SOSO -> 2, BAD -> 3)
+        int rating;
+        if (reviewData['reaction'] == 'GOOD') {
+          rating = 1;
+        } else if (reviewData['reaction'] == 'SOSO') {
+          rating = 2;
+        } else if (reviewData['reaction'] == 'BAD') {
+          rating = 3;
+        } else {
+          rating = 0; // 만약 예상치 못한 값이 있으면 기본값 설정
+        }
+
+        // imageUrl을 List<XFile>로 파싱
+        List<XFile> images = [];
+        if (reviewData['imageUrl'] != null) {
+          images = List<XFile>.from(
+            (reviewData['imageUrl'] as List)
+                .map((imagePath) => XFile(imagePath)),
+          );
+        }
+
+        setState(() {
+          _selectedCategory =
+              reviewData['keyword']; // 'keword' -> 'keyword' 오타 수정
+          _title = reviewData['title'];
+          _selectedRating = rating; // 변환된 rating 값 설정
+          _description = reviewData['content'];
+          _images = images; // 파싱된 images 리스트 설정
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load review data.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('An error occurred.')),
+      );
+    }
+  }
+
+  Future<void> _updateReview() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final url = '${ApiAddress}/review/${widget.reviewId}';
+
+    // reaction 값을 변환
+    String reaction;
+    if (_selectedRating == 1) {
+      reaction = 'GOOD';
+    } else if (_selectedRating == 2) {
+      reaction = 'SOSO';
+    } else if (_selectedRating == 3) {
+      reaction = 'BAD';
+    } else {
+      reaction = 'UNKNOWN'; // 기본값
+    }
+
+    // 이미지 경로를 string 리스트로 변환
+    List<String> imageUrls = _images.map((image) => image.path).toList();
+
+    // request body
+    final Map<String, dynamic> requestBody = {
+      "keyword": _selectedCategory ?? 'Unknown',
+      "title": _title ?? 'No Title',
+      "content": _description,
+      "reaction": reaction,
+      "images": imageUrls
+    };
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 201) {
+        _showModal(
+          'Success',
+          'Review updated successfully.',
+          true, // 성공 시 true로 처리
+        );
+      } else {
+        print(response.statusCode);
+        _showModal(
+          'Failed',
+          'Failed to update review. Please try again later.',
+          false, // 실패 시 false로 처리
+        );
+      }
+    } catch (e) {
+      _showModal(
+        'Error',
+        'An error occurred. Please try again later.',
+        false, // 에러 발생 시 false로 처리
+      );
+    }
+  }
+
+  void _showModal(String title, String message, bool success) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 모달 닫기
+                if (success) {
+                  // 성공 시 전 페이지로 돌아가고 새로고침
+                  Navigator.pop(context, true); // 성공 시 새로고침 전달
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -34,12 +188,12 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
             DropdownButtonFormField<String>(
               value: _selectedCategory,
               items: const [
-                'Dorm',
-                'Building',
-                'Food',
+                'Dormitory',
+                'Facility',
+                'Foods',
                 'Courses',
-                'Life hack',
-                'etc',
+                'Tips',
+                'Ects'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -64,21 +218,21 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                   _title = value;
                 });
               },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 labelText: 'Title',
+                hintText: _title, // 기존 제목 표시
               ),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // Good 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_very_satisfied, // 웃는 얼굴 아이콘
+                        Icons.sentiment_very_satisfied,
                         color:
                             _selectedRating == 1 ? Colors.green : Colors.grey,
                       ),
@@ -92,12 +246,11 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                         style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
-                // So So 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_neutral, // 중립적인 얼굴 아이콘
+                        Icons.sentiment_neutral,
                         color:
                             _selectedRating == 2 ? Colors.orange : Colors.grey,
                       ),
@@ -111,12 +264,11 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                         style: TextStyle(fontFamily: 'ggsansBold')),
                   ],
                 ),
-                // Bad 선택
                 Column(
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.sentiment_very_dissatisfied, // 찡그린 얼굴 아이콘
+                        Icons.sentiment_very_dissatisfied,
                         color: _selectedRating == 3 ? Colors.red : Colors.grey,
                       ),
                       onPressed: () {
@@ -141,9 +293,10 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                 });
               },
               maxLines: 12,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 labelText: 'Description (max 1000 characters)',
+                hintText: _description, // 기존 설명 표시
               ),
             ),
             const SizedBox(height: 16),
@@ -161,13 +314,11 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                       itemBuilder: (context, index) {
                         return Stack(
                           children: [
-                            // 이미지 표시
                             Image.file(
                               File(_images[index].path),
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),
-                            // 이미지 삭제 버튼 (오른쪽 상단)
                             Positioned(
                               right: 8,
                               top: 8,
@@ -177,7 +328,6 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                                 onPressed: () => _removeImage(index),
                               ),
                             ),
-                            // 이미지 개수 표시 (왼쪽 하단)
                             Positioned(
                               left: 8,
                               bottom: 8,
@@ -207,10 +357,7 @@ class _ReviewUpdateScreenState extends State<ReviewUpdateScreen> {
                 : const Text('No images added.'),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // 수정된 내용을 저장하는 로직 추가
-                Navigator.pop(context); // 화면을 닫고 이전 화면으로 돌아가기
-              },
+              onPressed: _updateReview, // 업데이트 버튼 눌렀을 때 _updateReview 호출
               child: const Text('Update',
                   style: TextStyle(fontFamily: 'ggsansBold')),
             ),

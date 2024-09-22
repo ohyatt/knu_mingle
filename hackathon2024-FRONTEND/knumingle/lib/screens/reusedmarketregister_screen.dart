@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:knumingle/constants/url.dart';
+import 'package:path_provider/path_provider.dart'; // 로컬 저장소 경로 가져오기
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReusedMarketRegisterScreen extends StatefulWidget {
@@ -21,27 +22,40 @@ class _ReusedMarketRegisterScreenState
   String _description = '';
   List<XFile> _images = [];
   final ImagePicker _picker = ImagePicker();
+  List<String> _localImagePaths = []; // 로컬에 저장된 이미지 경로 리스트
 
   // 이미지 추가 함수
   Future<void> _addImages() async {
     if (_images.length < 10) {
       final List<XFile>? selectedImages = await _picker.pickMultiImage();
       if (selectedImages != null) {
-        setState(() {
-          if (_images.length + selectedImages.length <= 10) {
-            _images.addAll(selectedImages);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text('You can only add up to 10 images.')),
-            );
+        for (var image in selectedImages) {
+          final String? savedPath = await _saveImageToLocalDirectory(image);
+          if (savedPath != null) {
+            setState(() {
+              _localImagePaths.add(savedPath);
+              _images.add(image);
+            });
           }
-        });
+        }
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You can only add up to 10 images.')),
-      );
+      _showErrorDialog('You can only add up to 10 images.');
+    }
+  }
+
+  // 이미지 로컬에 저장하는 함수
+  Future<String?> _saveImageToLocalDirectory(XFile image) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory(); // 로컬 저장소 경로
+      final String imagePath = '${directory.path}/${image.name}';
+      final File newImage = await File(imagePath).create();
+      await newImage.writeAsBytes(await image.readAsBytes());
+      return imagePath;
+    } catch (e) {
+      print('Error saving image: $e');
+      _showErrorDialog('Failed to save image.');
+      return null;
     }
   }
 
@@ -49,6 +63,7 @@ class _ReusedMarketRegisterScreenState
   void _removeImage(int index) {
     setState(() {
       _images.removeAt(index);
+      _localImagePaths.removeAt(index);
     });
   }
 
@@ -70,14 +85,11 @@ class _ReusedMarketRegisterScreenState
 
     final url = '${ApiAddress}/market'; // API 주소를 추가하세요
 
-    // 이미지 경로 리스트 생성
-    List<String> imagePaths = _images.map((image) => image.path).toList();
-
     final body = jsonEncode({
       'title': _title,
       'content': _description,
       'method': _preferredPaymentMethod,
-      'images': [],
+      'images': _localImagePaths, // 로컬 이미지 경로 리스트를 전송
     });
 
     final response = await http.post(
@@ -108,7 +120,7 @@ class _ReusedMarketRegisterScreenState
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // 모달 닫기
-                Navigator.pop(context); // 이전 화면으로 돌아가기
+                Navigator.of(context).pop(true); // 이전 화면으로 돌아가기
               },
               child: const Text('OK'),
             ),

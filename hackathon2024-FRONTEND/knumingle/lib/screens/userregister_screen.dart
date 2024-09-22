@@ -450,10 +450,12 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2 // 텍스트가 넘칠 경우 말줄임표로 처리
-                              ),
+                          child: Text(
+                            value,
+                            overflow:
+                                TextOverflow.ellipsis, // 텍스트가 넘칠 경우 말줄임표로 처리
+                            maxLines: 1, // 최대 한 줄로 설정
+                          ),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -465,6 +467,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                         border: OutlineInputBorder(),
                         labelText: 'Faculty',
                       ),
+                      isExpanded: true, // 드롭다운 항목이 넓어질 수 있도록 설정
                     ),
                   ),
                 ],
