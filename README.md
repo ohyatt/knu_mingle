@@ -98,13 +98,14 @@ KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 A
 <p>
     <img width="1453" alt="스크린샷 2024-09-22 오전 10 17 04" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
 </p>
-리뷰 조회자들은 해당 리뷰에 대해 Like, Dislike로 평가 가능><br>
+리뷰 조회자들은 해당 리뷰에 대해 Like, Dislike로 평가 가능<br>
 <p>
-    <img width="726" alt="스크린샷 2024-09-22 오전 10 22 51" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
+    <img width="1453" alt="스크린샷 2024-09-22 오전 10 22 51" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
 </p>
-5. 장터 게시판
+4. 장터 게시판
 
-6. 공공데이터 활용
+5. 공공데이터 활용
+
 
 
 
