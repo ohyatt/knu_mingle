@@ -272,9 +272,10 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h2>8. 외국인 학생 가이드</h2>
 
 <h2>구현 방식</h2>
-<p>System Architecture</p>
+<h3>System Architecture</h3>
 <p>
-    <img width="100%" src=https://github.com/user-attachments/assets/9d3ca3ca-e389-4735-bdf6-5fc69083807b"></p>
+    <img width="1058" src="https://github.com/user-attachments/assets/e550a445-7d45-42b1-963e-0e56923dbf8a">
+</p>
 
 <br><br><br><br><br>
 
