@@ -170,7 +170,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 
 
 <h2>3. 일반 로그인 → 인증</h2>
-<img src= https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519 width="50%">
+<img src="https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519" width="30%">
 
 <ul>
     <li>문화적 다양성 : 경북대학교에 재학 중인 다양한 국적의 외국인을 대상으로 하며, 각 국의 선호하는 인증 방식이 다를 수 있기 때문에, 특정한 OAuth에 의존하기 보다는 일반 로그인을 제공하는 것을 선택했습니다.</li>
@@ -219,6 +219,8 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h2>5. 리뷰 게시판</h2>
 <p>경북대학교와 한국에서의 생활에 대한 정보를 '리뷰' 형식으로 자유롭게 공유하는 게시판입니다.</p>
 <p>'리뷰' 형식이란 제목, 본문, 이미지 등이 하나의 카드 형태로 출력되는 것을 의미합니다. 예를 들어, 쿠팡의 상품 후기나 식당 리뷰처럼 사용자 경험을 시각적으로 간결하게 보여줍니다.</p>
+<img src="https://github.com/user-attachments/assets/47d95fa0-3681-441c-a3a2-185ca455cd6f" width="30%">
+
 <ul>
     <li>주요 키워드 6개: <strong>Dormitory, Facility, Foods, Courses, Tips, Ects</strong>를 기준으로 리뷰를 등록하고 조회할 수 있습니다.</li>
 </ul>
@@ -245,6 +247,8 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li>일반적인 게시판과 유사한 형태로, 거래 게시글의 제목들이 목록 형태로 한눈에 쭉 나열됩니다. </li>
     <li>각 게시글 제목 옆에는 거래 상태가 함께 표시되어, 본문을 보기 전에 거래 상태를 쉽게 확인할 수 있습니다.</li>
 </ul>
+<img src="https://github.com/user-attachments/assets/f73a51e3-48b2-4831-8f4a-708eeda6b9e8" width="30%">
+
 <p align="center">
     <img width="1453" alt="스크린샷 2024-09-22 오전 11 20 30" src="https://github.com/user-attachments/assets/8780a96b-bdb6-4318-9e28-e1037b645882">
 </p>
@@ -280,6 +284,10 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
             <li><code>getLocation</code> 메소드를 통해 병원의 주소를 입력받아 Google Maps API의 지오코딩 서비스를 사용하여 위도와 경도를 변환합니다.</li>
             <li>이를 통해 각 병원의 정확한 위치를 지도에 표시할 수 있습니다.</li>
         </ul>
+        <div style="display: flex; justify-content: space-between;">
+            <img src="https://github.com/user-attachments/assets/8347f29d-5a6e-46d5-a984-32acfbe6addf" width="30%">
+            <img src="https://github.com/user-attachments/assets/3f524094-6133-4a86-8ce6-88aebdf248bb" width="30%">
+        </div>
     </li>
     <li><strong>데이터 매핑:</strong>
         <ul>
@@ -300,6 +308,12 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <p>한국유학의 글로벌한 첫걸음이라는 책은 한국에서 유학하는 외국인 학생들을 위한 필수 정보를 제공하는 책자입니다.</p>
 <p>이 책자는 교육부 국립국제교육원에서 발간되었으며, 한국 유학, 취업, 생활 정보, 그리고 부록 등 다양한 내용을 포함하고 있습니다.</p>
 <p>이 가이드 북의 PDF 파일을 Guide 페이지에 업로드하여 사용자들이 별도의 과정없이 즉시 열람 가능하게 구현하였습니다.</p>
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/user-attachments/assets/eef34c90-7e69-473c-a2fb-3bd07bd32aa1" width="30%">
+    <img src="https://github.com/user-attachments/assets/4f471865-d7b8-4be1-87ff-9c53141ee117" width="30%">
+</div>
+
 
 <ol>
     <li>
