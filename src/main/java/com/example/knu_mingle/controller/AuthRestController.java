@@ -67,12 +67,8 @@ public class AuthRestController {
 
         insertKey = SHA256Util.getEncrypt(insertKey, email);
 
-
-
         System.out.println(key);
         System.out.println(insertKey);
-
-
 
         if(key.equals(insertKey)) {
             return true;
@@ -81,7 +77,7 @@ public class AuthRestController {
     }
 
     @Operation(summary = "회원탈퇴")
-    @DeleteMapping()
+    @PutMapping()
     public ResponseEntity<String> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         return ResponseEntity.ok(userService.deleteUser(accessToken));
     }
@@ -97,11 +93,7 @@ public class AuthRestController {
 
         String con = "[KNU MINGLE] \n YOUR NEW PASSWORD : "+new_password;
 
-
-
         mailManager.send(email, sub, con);
-
-
 
         return ResponseEntity.ok(userService.newPassword(email,new_password));
 

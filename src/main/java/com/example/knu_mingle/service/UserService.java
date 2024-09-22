@@ -49,7 +49,10 @@ public class UserService {
 
     public String deleteUser(String accessToken) {
         User user = getUserByToken(accessToken);
-        userRepository.delete(user);
+        user.setFirst_name("deleted");
+        user.setLast_name("deleted");
+        user.setEmail("deleted" + user.getId());
+        userRepository.save(user);
         return "Membership Canceled";
     }
 
