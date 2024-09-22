@@ -170,7 +170,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 
 
 <h2>3. 일반 로그인 → 인증</h2>
-<img src= https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519>
+<img src= https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519 width="50%">
 
 <ul>
     <li>문화적 다양성 : 경북대학교에 재학 중인 다양한 국적의 외국인을 대상으로 하며, 각 국의 선호하는 인증 방식이 다를 수 있기 때문에, 특정한 OAuth에 의존하기 보다는 일반 로그인을 제공하는 것을 선택했습니다.</li>
