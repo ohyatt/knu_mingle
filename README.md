@@ -93,30 +93,32 @@ KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 A
 ## 2. 회원가입(메일 유효성 검사), 일반 로그인 -> 인증, JWT 토큰 -> 인가
 
 <h2>3.리뷰 게시판</h2>
-<p>경북대학교와 한국에서의 생활에 대한 정보를 자유롭게 '리뷰' 형식으로 공유하는 게시판입니다.</p>
+<p>경북대학교와 한국에서의 생활에 대한 정보를 '리뷰' 형식으로 자유롭게 공유하는 게시판입니다.</p>
+<p>'리뷰' 형식이란 제목, 본문, 이미지 등이 하나의 카드 형태로 출력되는 것을 의미합니다. 예를 들어, 쿠팡의 상품 후기나 식당 리뷰처럼 사용자 경험을 시각적으로 간결하게 보여줍니다.</p>
 <ul>
     <li>주요 키워드 6개: <strong>Dormitory, Facility, Foods, Courses, Tips, Ects</strong>를 기준으로 리뷰를 등록하고 조회할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" alt="리뷰 게시판 화면" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
+    <img width="80%" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
 </p>
 <ul>
-    <li>리뷰 본문과 함께 이미지 업로드가 가능합니다.</li>
-    <li>각 리뷰는 이미지 URL 리스트를 포함할 수 있습니다.</li>
+    <li>리뷰 본문과 함께 여러 장의 이미지 업로드가 가능하므로, 각 리뷰는 이미지 URL 리스트를 포함할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" alt="리뷰 이미지 업로드" src="https://github.com/user-attachments/assets/139877ee-abf6-49d6-827f-a317734a2d17">
+    <img width="80%" src="https://github.com/user-attachments/assets/139877ee-abf6-49d6-827f-a317734a2d17">
 </p>
 <ul>
     <li>리뷰 조회자들은 해당 리뷰에 대해 <strong>Like</strong> 또는 <strong>Dislike</strong>로 평가할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" alt="리뷰 평가 화면" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
+    <img width="80%" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
 </p>
 
-## 4. 장터 게시판
+<h2>4.장터 게시판</h2>
+<p>파견 전후로, 학생 간 물품 거래 또는 나눔 활동에 참여할 수 있는 기회를 제공하는 온라인 장터 게시판입니다.</p>
+<p>일반 게시판의 형태와 유사하게, </p>
 
-## 5. 공공데이터 활용
+<h2>5.공공데이터 활용</h2>
 
 
 
