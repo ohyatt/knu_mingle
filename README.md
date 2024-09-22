@@ -15,12 +15,14 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 - E타입 경북대에 다니는 다양한 배경의 학우들을 위한 서비스
   
 ## 🧑‍🧑‍🧒‍🧒 팀원 소개
+<p align="center">
 |                         |                         |                         |                         |
 |-------------------------|-------------------------|-------------------------|-------------------------|
 | **BE**                  | **BE**                  | **FE**                  | **BE**                  |
 | <img src="https://github.com/ohyatt.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/Youngini.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/beoldshoe.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/dhtmddn00.png" width="100" height="100" style="border-radius:50%;"> |
 | **이민수**              | **김영인**              | **김현수**              | **오승우**              |
 | [@ohyatt](https://github.com/ohyatt)  | [@Youngini](https://github.com/Youngini) | [@beoldshoe](https://github.com/beoldshoe) | [@dhtmddn00](https://github.com/dhtmddn00) |
+</p>
 
 ## 시연 영상
 유튜브 링크: https://www.youtube.com/watch?v=210fm_dvD-Y
@@ -340,7 +342,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     </li>
     <li><strong>공공데이터와 가이드 데이터의 지속적인 유지보수를 통한 Daily Map 기능과 Guide 기능의 주기적인 업데이트</strong></li>
         <ul>
-            <li>‘대구 안심음식점’, ‘대구광역시 공연/전시 안내’ API 등 다양한 분야의 공공데이터 추가 활용 예정.</li>
+            <li>‘대구 안심음식점’, ‘대구광역시 공연/전시 안내’ API 등 다양한 분야의 공공데이터 추가 활용 예정</li>
             <li>경북대학교 국제교류처 및 한국유학종합시스템, 재외 한국 공관 사이트 등으로의 바로가기 링크 추가 예정</li>
         </ul>
     <li><strong>국제교류처 공식 어플로서 활용</strong>
