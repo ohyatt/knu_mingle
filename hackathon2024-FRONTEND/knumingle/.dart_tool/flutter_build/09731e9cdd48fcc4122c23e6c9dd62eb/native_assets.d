@@ -1,0 +1,1 @@
+ /Users/young-in/project/knu_mingle/hackathon2024-FRONTEND/knumingle/.dart_tool/flutter_build/09731e9cdd48fcc4122c23e6c9dd62eb/native_assets.yaml: 

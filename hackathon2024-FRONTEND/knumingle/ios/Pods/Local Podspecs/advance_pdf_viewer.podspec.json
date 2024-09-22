@@ -1,0 +1,26 @@
+{
+  "name": "advance_pdf_viewer",
+  "version": "1.0.5",
+  "summary": "Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.",
+  "description": "Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.",
+  "homepage": "http://example.com",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Your Company": "email@example.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "8.0"
+  }
+}
