@@ -15,14 +15,12 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 - E타입 경북대에 다니는 다양한 배경의 학우들을 위한 서비스
   
 ## 🧑‍🧑‍🧒‍🧒 팀원 소개
-<p align="center">
 |                         |                         |                         |                         |
 |-------------------------|-------------------------|-------------------------|-------------------------|
 | **BE**                  | **BE**                  | **FE**                  | **BE**                  |
 | <img src="https://github.com/ohyatt.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/Youngini.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/beoldshoe.png" width="100" height="100" style="border-radius:50%;"> | <img src="https://github.com/dhtmddn00.png" width="100" height="100" style="border-radius:50%;"> |
 | **이민수**              | **김영인**              | **김현수**              | **오승우**              |
 | [@ohyatt](https://github.com/ohyatt)  | [@Youngini](https://github.com/Youngini) | [@beoldshoe](https://github.com/beoldshoe) | [@dhtmddn00](https://github.com/dhtmddn00) |
-</p>
 
 ## 시연 영상
 유튜브 링크: https://www.youtube.com/watch?v=210fm_dvD-Y
