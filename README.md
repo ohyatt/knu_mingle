@@ -126,7 +126,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 
 <h1>📱 구현 내용 및 결과물</h1>
 <h2>1. ERD</h2>
-<p align="center">
+<p>
     <img width="694" src="https://github.com/user-attachments/assets/547b2372-e0b5-4430-acbb-53333737b9c5">
 </p>
 
@@ -137,25 +137,25 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li>
         탈취에 대비하여 메일 인증번호를 암호화합니다.
     </li>
-    <p align="center">
+    <p>
         <img width="609" src="https://github.com/user-attachments/assets/d7a3c010-4f44-4a37-999b-427b13352d75">
     </p>
     <li>
         구글 SMTP를 이용한 메일 API로 <strong>MailManager</strong> 클래스를 작성해 메일 발송 기능을 구현합니다.
     </li>
-    <p align="center">
+    <p>
         <img width="609" src="https://github.com/user-attachments/assets/d4530ac0-5193-4104-a8bf-d0bfda6ba697">
     </p>
     <li>
         이메일 인증을 처리하는 컨트롤러는 랜덤으로 키를 생성하여 이메일로 보내고, 키를 암호화하여 클라이언트 측으로 반환합니다.
     </li>
-    <p align="center">
+    <p>
         <img width="805" src="https://github.com/user-attachments/assets/8944a88f-b7ac-4368-87a0-8d8acc1d93b1">
     </p>
     <li>
         사용자 측에서 이메일 확인 후 입력한 키를 암호화한 값과 클라이언트 측에서 반환받아 암호화된 키를 비교하여, 일치하면 <strong>true</strong>, 불일치하면 <strong>false</strong>를 반환합니다.
     </li>
-    <p align="center">
+    <p>
         <img width="786" alt="KakaoTalk_Photo_2024-09-22-12-59-33" src="https://github.com/user-attachments/assets/42ca279c-edd7-4492-886c-ef9994d2b8a3">
     </p>
 </ol>
@@ -163,7 +163,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h3>2-2. 비밀번호 재발급</h3>
 <p>mailManager의 이메일 발송 기능을 이용해 난수를 생성하여 사용자의 비밀번호 정보를 변경한다.</p>
 <p>그 난수로 생성한 새로운 비밀번호를 사용자의 이메일로 발송한다.</p>
-<p align="center">
+<p>
 <img width="793" alt="KakaoTalk_Photo_2024-09-22-13-07-25" src="https://github.com/user-attachments/assets/605f138e-b5c6-47f1-82a2-c04d90dac84e">
 </p>
 
