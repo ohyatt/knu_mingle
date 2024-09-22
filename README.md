@@ -23,8 +23,32 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 | [@ohyatt](https://github.com/ohyatt)  | [@Youngini](https://github.com/Youngini) | [@beoldshoe](https://github.com/beoldshoe) | [@dhtmddn00](https://github.com/dhtmddn00) |
 
 ## 시연 영상
-(필수) Youtube 링크
-(선택) Github Repository 페이지에서 바로 볼 수 있도록 넣어주셔도 좋습니다.
+Youtube Link: https://www.youtube.com/watch?v=210fm_dvD-Y
+
+<p>2024 대구를 빛내는 해커톤 - 3팀 라스트댄스</p>
+<p>KNU Mingle 실행 영상입니다.</p>
+
+### 타임라인
+<ul>
+    <li>0:00 시작로고 화면 및 로그인</li>
+    <li>0:11 회원가입(중복확인, 이메일 인증번호 보내기, 인증번호 확인)</li>
+    <li>0:41 로그인 및 Review 등록 후 등록한 게시물 확인</li>
+    <li>1:11 제목, 카테고리, 날짜순, 이름 순 정렬 확인 및 타인의 게시물 수정 및 삭제 접근 금지</li>
+    <li>1:25 좋아요 후 날짜 순, 좋아요 순 정렬</li>
+    <li>1:34 리뷰 수정 후 확인</li>
+    <li>2:04 마켓 등록</li>
+    <li>2:35 마켓 제목, 국가 별 필터링</li>
+    <li>2:42 본인 게시물 수정 및 타인 게시물 수정, 삭제 불가</li>
+    <li>3:01 본인 게시물 삭제 및 댓글 등록</li>
+    <li>3:15 댓글 수정 및 삭제</li>
+    <li>3:25 지도 부분</li>
+    <li>3:40 가이드북</li>
+    <li>3:55 회원 정보 수정</li>
+    <li>4:09 로그아웃</li>
+    <li>4:11 회원 탈퇴 후 로그인 시도</li>
+    <li>4:19 비밀번호 재발급 이후 로그인 시도</li>
+</ul>
+
 
 <br><br><br><br><br>
 <h1> 💡 서비스 소개</h1>
@@ -41,10 +65,10 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
         <strong>장터 게시판</strong>: 학생 간 물품 거래 또는 나눔 활동에 참여할 수 있는 온라인 장터를 통해 필요한 물건을 쉽게 사고팔거나 나누는 기회를 제공합니다.
     </li>
     <li>
-        <strong>데일리 맵</strong>: 지도에 등록된 데이터를 활용하여 일상 생활에 필수적인 정보를 얻을 수 있으며, 외국인 학생들이 한국 생활에 빠르게 적응할 수 있도록 돕습니다.
+        <strong>데일리 맵</strong>: 지도에 등록된 데이터를 활용하여 일상 생활에 필수적인 정보를 직관적인 맵 마커를 통해 얻을 수 있습니다.
     </li>
     <li>
-        <strong>가이드</strong>: 외국인 학생들을 위한 가이드북(7개국 언어)을 제공하고, 경북대학교 국제교류처 및 한국유학종합시스템, 재외 한국 공관 사이트 등으로의 링크를 제공합니다.
+        <strong>가이드</strong>: 외국인 학생들을 위한 가이드북 '한국유학의 글로벌한 첫걸음'(7개국 언어) PDF 책자를 제공하여, 외국인 학생들이 한국 생활에 빠르게 적응할 수 있도록 돕습니다.
     </li>
 </ul>
 <p>
@@ -95,14 +119,14 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li><strong>쉽고 직관적인 UI/UX</strong>: 외국인 학생들이 앱을 쉽게 이용할 수 있도록 설계하여 사용상의 어려움을 최소화합니다.</li>
     <li><strong>외국인 학생 대상</strong>: 서비스 주요 대상을 '외국인 학생'으로 설정하고, 기본 지원 언어를 한국어가 아닌 영어로 제공합니다.</li>
     <li><strong>공공데이터 및 지도 API 활용</strong>: 지도에 표시된 마커를 통해 외국인 학생들이 한눈에 필요한 정보를 파악할 수 있도록 도와줍니다.</li>
-    <li><strong>외국인 학생 가이드북 및 필수 정보 제공</strong>: 커뮤니티 기능뿐만 아니라 국제교류처, 한국유학종합시스템, 재외 한국 공관 등의 관련 사이트 링크와 가이드북을 통해 필수적인 정보를 제공합니다.</li>
+    <li><strong>외국인 학생 가이드북 및 필수 정보 제공</strong>: 커뮤니티 기능뿐만 아니라 외국인 학생을 위한 가이드북을 통해 필수적인 정보를 제공합니다.</li>
 </ol>
 
 <br><br><br><br><br>
 
 <h1>📱 구현 내용 및 결과물</h1>
 <h2>1. ERD</h2>
-<p>
+<p align="center">
     <img width="694" src="https://github.com/user-attachments/assets/547b2372-e0b5-4430-acbb-53333737b9c5">
 </p>
 
@@ -113,25 +137,25 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li>
         탈취에 대비하여 메일 인증번호를 암호화합니다.
     </li>
-    <p>
+    <p align="center">
         <img width="609" src="https://github.com/user-attachments/assets/d7a3c010-4f44-4a37-999b-427b13352d75">
     </p>
     <li>
         구글 SMTP를 이용한 메일 API로 <strong>MailManager</strong> 클래스를 작성해 메일 발송 기능을 구현합니다.
     </li>
-    <p>
+    <p align="center">
         <img width="609" src="https://github.com/user-attachments/assets/d4530ac0-5193-4104-a8bf-d0bfda6ba697">
     </p>
     <li>
         이메일 인증을 처리하는 컨트롤러는 랜덤으로 키를 생성하여 이메일로 보내고, 키를 암호화하여 클라이언트 측으로 반환합니다.
     </li>
-    <p>
+    <p align="center">
         <img width="805" src="https://github.com/user-attachments/assets/8944a88f-b7ac-4368-87a0-8d8acc1d93b1">
     </p>
     <li>
         사용자 측에서 이메일 확인 후 입력한 키를 암호화한 값과 클라이언트 측에서 반환받아 암호화된 키를 비교하여, 일치하면 <strong>true</strong>, 불일치하면 <strong>false</strong>를 반환합니다.
     </li>
-    <p>
+    <p align="center">
         <img width="786" alt="KakaoTalk_Photo_2024-09-22-12-59-33" src="https://github.com/user-attachments/assets/42ca279c-edd7-4492-886c-ef9994d2b8a3">
     </p>
 </ol>
@@ -139,7 +163,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h3>2-2. 비밀번호 재발급</h3>
 <p>mailManager의 이메일 발송 기능을 이용해 난수를 생성하여 사용자의 비밀번호 정보를 변경한다.</p>
 <p>그 난수로 생성한 새로운 비밀번호를 사용자의 이메일로 발송한다.</p>
-<p>
+<p align="center">
 <img width="793" alt="KakaoTalk_Photo_2024-09-22-13-07-25" src="https://github.com/user-attachments/assets/605f138e-b5c6-47f1-82a2-c04d90dac84e">
 </p>
 
@@ -154,7 +178,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 
 <h2>4. JWT 토큰 → 인가</h2>
 <p>KNU Mingle 플랫폼에서 사용자 인증을 위해 JWT를 사용했습니다. JWT를 사용함으로써, 서버는 상태를 유지할 필요 없이 클라이언트의 요청을 처리할 수 있으며, 사용자 정보를 안전하게 전송하고 관리할 수 있습니다.</p>
-<p>
+<p align="center">
     <img width="1007" alt="jwt" src="https://github.com/user-attachments/assets/550aad68-1cf9-4e37-9f44-3349b79ef5b9">
 </p>
 <ol>
@@ -196,20 +220,20 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <ul>
     <li>주요 키워드 6개: <strong>Dormitory, Facility, Foods, Courses, Tips, Ects</strong>를 기준으로 리뷰를 등록하고 조회할 수 있습니다.</li>
 </ul>
-<p>
+<p align="center">
     <img width="1453" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
 </p>
 <ul>
     <li>리뷰 본문과 함께 여러 장의 이미지 업로드가 가능하므로, 각 리뷰는 이미지 URL 리스트를 포함할 수 있습니다.</li>
 </ul>
-<p>
+<p align="center">
     <img width="1453" src="https://github.com/user-attachments/assets/139877ee-abf6-49d6-827f-a317734a2d17">
 </p>
 <ul>
     <h3>5.1. 평가 기능</h3>
     <li>리뷰 조회자들은 해당 리뷰에 대해 <strong>Like</strong> 또는 <strong>Dislike</strong>로 평가할 수 있습니다.</li>
 </ul>
-<p>
+<p align="center">
     <img width="1453" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
 </p>
 
@@ -219,7 +243,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li>일반적인 게시판과 유사한 형태로, 거래 게시글의 제목들이 목록 형태로 한눈에 쭉 나열됩니다. </li>
     <li>각 게시글 제목 옆에는 거래 상태가 함께 표시되어, 본문을 보기 전에 거래 상태를 쉽게 확인할 수 있습니다.</li>
 </ul>
-<p>
+<p align="center">
     <img width="1453" alt="스크린샷 2024-09-22 오전 11 20 30" src="https://github.com/user-attachments/assets/8780a96b-bdb6-4318-9e28-e1037b645882">
 </p>
 
@@ -230,12 +254,12 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <h3>6.1. 댓글 기능</h3>
     <li>거래 게시글 조회자들은 해당 게시글 본문 아래에 위치한 댓글창에 거래 관련 메시지를 남길 수 있습니다.</li>
 </ul>
-<p>
+<p align="center">
     <img width="1453" alt="스크린샷 2024-09-22 오전 11 24 19" src="https://github.com/user-attachments/assets/8c963952-5a71-40b7-aa4b-5387162e437e">
 </p>
 
 <h2>7. 공공데이터 활용</h2>
-<p>
+<p align="center">
     <img width="1512" alt="공공1" src="https://github.com/user-attachments/assets/959874de-dd60-4d21-ae27-59b2c7b1c605">
     <img width="1512" alt="공공2" src="https://github.com/user-attachments/assets/963461e3-8076-4735-8703-618fcbbdb0d7">
 </p>
@@ -245,7 +269,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
             <li>[대구광역시의 의료관광 선도의료기관]과 [외국환자와 언어소통 가능한 병원] 데이터를 공공데이터로부터 받아서 활용하였습니다.</li>
             <li>이 데이터에는 병원의 주소와 함께 제공되는 서비스 정보가 포함되어 있어, 외국인 환자들이 필요한 의료기관을 쉽게 찾을 수 있도록 돕습니다.</li>
         </ul>
-        <p>
+        <p align="center">
             <img width="1453" src="https://github.com/user-attachments/assets/46463287-7dbe-46ab-984d-b3964d6e68f7">
         </p>
     </li>
@@ -263,18 +287,39 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     </li>
 </ol>
 
-<p><img width="1058" src="https://github.com/user-attachments/assets/d93c0780-54d8-46e6-bfbf-251f50d4cac4"></p>
+<p align="center">
+    <img width="1058" src="https://github.com/user-attachments/assets/d93c0780-54d8-46e6-bfbf-251f50d4cac4"></p>
 <p>
 이 구현을 통해 외국인 환자들은 대구광역시에 있는 의료기관의 위치와 제공하는 서비스, 언어 소통 가능 여부 등을 쉽게 확인할 수 있습니다. Google Maps API에 매핑된 데이터는 사용자에게 직관적인 시각 정보를 제공하여, 의료기관을 찾는 데 필요한 시간을 단축시킵니다.</p>
 <p>또한, 이 서비스는 외국인들이 한국에서의 의료 서비스를 보다 원활하게 이용할 수 있도록 지원하며, 결과적으로는 외국인 환자들이 필요한 정보를 신속하게 얻을 수 있어 의료 접근성을 높이는 데 크게 기여할 수 있습니다.</p>
 
 
 <h2>8. 외국인 학생 가이드</h2>
+<p>한국유학의 글로벌한 첫걸음이라는 책은 한국에서 유학하는 외국인 학생들을 위한 필수 정보를 제공하는 책자입니다.</p>
+<p>이 책자는 교육부 국립국제교육원에서 발간되었으며, 한국 유학, 취업, 생활 정보, 그리고 부록 등 다양한 내용을 포함하고 있습니다.</p>
+<p>이 가이드 북의 PDF 파일을 Guide 페이지에 업로드하여 사용자들이 별도의 과정없이 즉시 열람 가능하게 구현하였습니다.</p>
+
+<ol>
+    <li>
+        <strong>언어 선택 기능</strong>: 
+        사용자가 원하는 언어로 PDF를 선택할 수 있어, 각국의 학생들이 편리하게 정보를 얻을 수 있습니다.
+    </li>
+    <li>
+        <strong>실질적인 정보 제공</strong>: 
+        의료 보험, 운전면허, 휴대폰 개통 등 한국에서 생활하는 데 필요한 실질적인 정보가 포함되어 있습니다. 이를 통해 외국인 학생들이 새로운 환경에 적응하는 데 도움을 줍니다.
+    </li>
+    <li>
+        <strong>다국어 지원</strong>: 
+        한국어, 중국어, 일본어, 영어, 스페인어, 베트남어, 러시아어 등 총 7개 언어로 번역되어, 다양한 국적의 외국인 학생들이 쉽게 접근할 수 있도록 합니다.
+    </li>
+</ol>
+
+
 
 <h2>구현 방식</h2>
 <h3>System Architecture</h3>
-<p>
-    <img width="70%" src="https://github.com/user-attachments/assets/e550a445-7d45-42b1-963e-0e56923dbf8a">
+<p align="center">
+    <img width="50%" src="https://github.com/user-attachments/assets/e550a445-7d45-42b1-963e-0e56923dbf8a">
 </p>
 
 <br><br><br><br><br>
@@ -288,15 +333,15 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     </li>
     <li><strong>게시물 관련 기능 추가 구현</strong>
         <ul>
-            <li>게시물 자동 번역 기능 제공</li>
-            <li>비공개 댓글 기능 지원</li>
+            <li>게시물 번역 기능 제공</li>
+            <li>장터 게시글 내 비공개 댓글 기능 지원</li>
             <li>게시물/댓글 내 금칙어 및 비속어 필터링 기능 구현</li>
         </ul>
     </li>
     <li><strong>공공데이터와 가이드 데이터의 지속적인 유지보수를 통한 Daily Map 기능과 Guide 기능의 주기적인 업데이트</strong></li>
         <ul>
             <li>‘대구 안심음식점’, ‘대구광역시 공연/전시 안내’ API 등 다양한 분야의 공공데이터 추가 활용 예정.</li>
-            <li>‘주한공관 주소록’ 등 외국인의 한국 생활에 유용한 정보를 Guide 기능을 통해 제공할 예정</li>
+            <li>경북대학교 국제교류처 및 한국유학종합시스템, 재외 한국 공관 사이트 등으로의 바로가기 링크 추가 예정</li>
         </ul>
     <li><strong>국제교류처 공식 어플로서 활용</strong>
         <ul>
