@@ -170,7 +170,10 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 
 
 <h2>3. 일반 로그인 → 인증</h2>
-<img src="https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519" width="30%">
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/user-attachments/assets/e661960f-cf2c-4f5f-9666-a66137d67519" width="30%">
+    <img src="https://github.com/user-attachments/assets/893e8aaf-87eb-4887-b40f-807b3d1078d7" width="30%">
+</div>
 
 <ul>
     <li>문화적 다양성 : 경북대학교에 재학 중인 다양한 국적의 외국인을 대상으로 하며, 각 국의 선호하는 인증 방식이 다를 수 있기 때문에, 특정한 OAuth에 의존하기 보다는 일반 로그인을 제공하는 것을 선택했습니다.</li>
@@ -219,7 +222,11 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h2>5. 리뷰 게시판</h2>
 <p>경북대학교와 한국에서의 생활에 대한 정보를 '리뷰' 형식으로 자유롭게 공유하는 게시판입니다.</p>
 <p>'리뷰' 형식이란 제목, 본문, 이미지 등이 하나의 카드 형태로 출력되는 것을 의미합니다. 예를 들어, 쿠팡의 상품 후기나 식당 리뷰처럼 사용자 경험을 시각적으로 간결하게 보여줍니다.</p>
-<img src="https://github.com/user-attachments/assets/47d95fa0-3681-441c-a3a2-185ca455cd6f" width="30%">
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/user-attachments/assets/47d95fa0-3681-441c-a3a2-185ca455cd6f" width="30%">
+    <img src="https://github.com/user-attachments/assets/eb4ce2a8-e897-4e85-8600-3da330206ae1" width="30%">
+    <img src="https://github.com/user-attachments/assets/4fe73b66-a937-4306-bc61-3780d7b879f0" width="30%">
+</div>
 
 <ul>
     <li>주요 키워드 6개: <strong>Dormitory, Facility, Foods, Courses, Tips, Ects</strong>를 기준으로 리뷰를 등록하고 조회할 수 있습니다.</li>
@@ -247,7 +254,11 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     <li>일반적인 게시판과 유사한 형태로, 거래 게시글의 제목들이 목록 형태로 한눈에 쭉 나열됩니다. </li>
     <li>각 게시글 제목 옆에는 거래 상태가 함께 표시되어, 본문을 보기 전에 거래 상태를 쉽게 확인할 수 있습니다.</li>
 </ul>
-<img src="https://github.com/user-attachments/assets/f73a51e3-48b2-4831-8f4a-708eeda6b9e8" width="30%">
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/user-attachments/assets/f73a51e3-48b2-4831-8f4a-708eeda6b9e8" width="30%">
+    <img src="https://github.com/user-attachments/assets/d37614fb-6a93-4235-8912-951ac37c8c31" width="30%">
+    <img src="https://github.com/user-attachments/assets/5d1c4761-b393-4251-99ac-67c7b696fee7" width="30%">
+</div>
 
 <p align="center">
     <img width="1453" alt="스크린샷 2024-09-22 오전 11 20 30" src="https://github.com/user-attachments/assets/8780a96b-bdb6-4318-9e28-e1037b645882">
