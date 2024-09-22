@@ -23,7 +23,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 | [@ohyatt](https://github.com/ohyatt)  | [@Youngini](https://github.com/Youngini) | [@beoldshoe](https://github.com/beoldshoe) | [@dhtmddn00](https://github.com/dhtmddn00) |
 
 ## 시연 영상
-Youtube Link: https://www.youtube.com/watch?v=210fm_dvD-Y
+유튜브 링크: https://www.youtube.com/watch?v=210fm_dvD-Y
 
 <p>2024 대구를 빛내는 해커톤 - 3팀 라스트댄스</p>
 <p>KNU Mingle 실행 영상입니다.</p>
