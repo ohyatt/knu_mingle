@@ -263,7 +263,7 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
     </li>
 </ol>
 
-<p><img width="1058" alt="공공3" src="https://github.com/user-attachments/assets/d93c0780-54d8-46e6-bfbf-251f50d4cac4"></p>
+<p><img width="1058" src="https://github.com/user-attachments/assets/d93c0780-54d8-46e6-bfbf-251f50d4cac4"></p>
 <p>
 이 구현을 통해 외국인 환자들은 대구광역시에 있는 의료기관의 위치와 제공하는 서비스, 언어 소통 가능 여부 등을 쉽게 확인할 수 있습니다. Google Maps API에 매핑된 데이터는 사용자에게 직관적인 시각 정보를 제공하여, 의료기관을 찾는 데 필요한 시간을 단축시킵니다.</p>
 <p>또한, 이 서비스는 외국인들이 한국에서의 의료 서비스를 보다 원활하게 이용할 수 있도록 지원하며, 결과적으로는 외국인 환자들이 필요한 정보를 신속하게 얻을 수 있어 의료 접근성을 높이는 데 크게 기여할 수 있습니다.</p>
@@ -272,7 +272,9 @@ KNU Mingle은 경북대학교에 재학 중인 외국인 학생들이 서로 어
 <h2>8. 외국인 학생 가이드</h2>
 
 <h2>구현 방식</h2>
-System Architecture
+<p>System Architecture</p>
+<p>
+    <img width="100%" src=https://github.com/user-attachments/assets/9d3ca3ca-e389-4735-bdf6-5fc69083807b"></p>
 
 <br><br><br><br><br>
 
