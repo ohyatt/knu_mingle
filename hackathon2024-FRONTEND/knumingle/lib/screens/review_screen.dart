@@ -548,7 +548,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                           child: PageView.builder(
                                             itemCount: review['images'].length,
                                             itemBuilder: (context, imageIndex) {
-                                              return Image.network(
+                                              return Image.asset(
                                                 review['images'][imageIndex],
                                                 fit: BoxFit.cover,
                                               );
@@ -648,7 +648,13 @@ class _ReviewPageState extends State<ReviewPage> {
                                                   // 필요한 다른 리뷰 데이터도 전달
                                                 ),
                                               ),
-                                            );
+                                            ).then((shouldRefesh) {
+                                              if (shouldRefesh == true) {
+                                                setState(() {
+                                                  _fetchReviews();
+                                                });
+                                              }
+                                            });
                                           } else {
                                             // 권한이 없다는 모달 표시
                                             showDialog(

@@ -263,7 +263,8 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
                   child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context).pop(); // Go back to previous screen
+                    Navigator.of(context)
+                        .pop(true); // Go back to previous screen
                   },
                 ),
               ],
