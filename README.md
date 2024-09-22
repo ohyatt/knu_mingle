@@ -99,24 +99,41 @@ KNU Mingle: KNU 외국인 학생을 위한 정보 공유 & 장터 커뮤니티 A
     <li>주요 키워드 6개: <strong>Dormitory, Facility, Foods, Courses, Tips, Ects</strong>를 기준으로 리뷰를 등록하고 조회할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
+    <img width="1453" src="https://github.com/user-attachments/assets/7086306b-36e7-4ceb-a0af-bc1035319495">
 </p>
 <ul>
     <li>리뷰 본문과 함께 여러 장의 이미지 업로드가 가능하므로, 각 리뷰는 이미지 URL 리스트를 포함할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" src="https://github.com/user-attachments/assets/139877ee-abf6-49d6-827f-a317734a2d17">
+    <img width="1453" src="https://github.com/user-attachments/assets/139877ee-abf6-49d6-827f-a317734a2d17">
 </p>
 <ul>
+    <h3>평가 기능</h3>
     <li>리뷰 조회자들은 해당 리뷰에 대해 <strong>Like</strong> 또는 <strong>Dislike</strong>로 평가할 수 있습니다.</li>
 </ul>
 <p>
-    <img width="80%" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
+    <img width="1453" src="https://github.com/user-attachments/assets/dc31b94e-aeb9-4986-8684-a39a7ce01ebc">
 </p>
 
 <h2>4.장터 게시판</h2>
-<p>파견 전후로, 학생 간 물품 거래 또는 나눔 활동에 참여할 수 있는 기회를 제공하는 온라인 장터 게시판입니다.</p>
-<p>일반 게시판의 형태와 유사하게, </p>
+<p>외국인 학생들의 경북대학교 파견 전후로, 학생 간 물품 거래 또는 나눔 활동에 참여할 수 있는 기회를 제공하는 온라인 장터 게시판입니다.</p>
+<ul>
+    <li>일반적인 게시판과 유사한 형태로, 거래 게시글의 제목들이 목록 형태로 한눈에 쭉 나열됩니다. 각 게시글 제목 옆에는 거래 상태가 함께 표시되어, 본문을 보기 전에 거래 상태를 쉽게 확인할 수 있습니다.</li>
+</ul>
+<p>
+    <img width="1453" alt="스크린샷 2024-09-22 오전 11 20 30" src="https://github.com/user-attachments/assets/8780a96b-bdb6-4318-9e28-e1037b645882">
+</p>
+
+<ul>
+    <li>거래 게시글 본문과 함께 여러 장의 이미지 업로드가 가능하므로, 각 게시글은 이미지 URL 리스트를 포함할 수 있습니다.</li>
+</ul>
+<ul>
+    <h3>댓글 기능</h3>
+    <li>거래 게시글 조회자들은 해당 게시글 본문 아래에 위치한 댓글창에 거래 관련 메시지를 남길 수 있다.</li>
+</ul>
+<p>
+    <img width="1453" alt="스크린샷 2024-09-22 오전 11 24 19" src="https://github.com/user-attachments/assets/8c963952-5a71-40b7-aa4b-5387162e437e">
+</p>
 
 <h2>5.공공데이터 활용</h2>
 
