@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:knumingle/constants/url.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReusedMarketDetailScreen extends StatefulWidget {
@@ -169,8 +171,8 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
               TextButton(
                 child: const Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop(); // Go back to the previous screen
+                  Navigator.of(context).pop(); // 다이얼로그 닫기
+                  Navigator.of(context).pop(true); // 이전 화면으로 돌아가기, true를 전달
                 },
               ),
             ],
@@ -208,18 +210,26 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
     );
   }
 
-  void _updateMarketDetails() async {
+  Future<void> _updateMarketDetails() async {
     final url = '${ApiAddress}/market/${widget.itemId}';
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
-    // Prepare images data
-    final List<Map<String, dynamic>> imagesData = _images.map((image) {
-      return {
-        'imageUrl': image.path, // Assuming the image URL is the file path
-        'imageId': 0, // Set a default value, you can customize this if needed
-      };
-    }).toList();
+    // Prepare a list to hold image paths
+    final List<String> imagePaths = [];
+
+    // Save images to local storage
+    for (var image in _images) {
+      final file = File(image.path);
+      if (await file.exists()) {
+        // Get the app's documents directory
+        final appDir = await getApplicationDocumentsDirectory();
+        // Create a new file in the documents directory
+        final newFile = await file.copy(
+            '${appDir.path}/${image.name}'); // Use the original file name or customize as needed
+        imagePaths.add(newFile.path); // Store the new file path
+      }
+    }
 
     // Prepare request body
     final Map<String, dynamic> requestBody = {
@@ -227,7 +237,7 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
       'content': _description,
       'method': _preferredPaymentMethod ?? '',
       'status': _status,
-      'images': []
+      'images': imagePaths, // Include the paths to the saved images
     };
 
     try {
@@ -414,8 +424,11 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
                       itemBuilder: (context, index) {
                         return Stack(
                           children: [
-                            Image.file(File(_images[index].path),
-                                fit: BoxFit.cover),
+                            Image.file(
+                              File(_images[index].path),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
                             if (_isEditMode)
                               Positioned(
                                 right: 8,
@@ -426,6 +439,27 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
                                   onPressed: () => _removeImage(index),
                                 ),
                               ),
+                            Positioned(
+                              left: 8,
+                              bottom: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '${index + 1} / ${_images.length} images',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       },
@@ -435,12 +469,37 @@ class _ReusedMarketDetailScreenState extends State<ReusedMarketDetailScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _isEditMode = !_isEditMode;
-                });
+                // _currentUserId와 userId 비교
+                if (_currentUserId == userId) {
+                  // 같으면 Edit 모드 활성화
+                  setState(() {
+                    _isEditMode = !_isEditMode;
+                  });
+                } else {
+                  // 다르면 Permission Denied 메시지 표시
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Permission Denied'),
+                        content: Text('You do not have permission to edit.'),
+                        actions: [
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
-              child: Text(_isEditMode ? 'Edit Mode Off' : 'Edit Mode On',
-                  style: const TextStyle(fontFamily: 'ggsansBold')),
+              child: Text(
+                _isEditMode ? 'Edit Mode Off' : 'Edit Mode On',
+                style: const TextStyle(fontFamily: 'ggsansBold'),
+              ),
             ),
             const SizedBox(height: 16),
             if (_isEditMode)
@@ -475,7 +534,9 @@ class CommentsModal extends StatefulWidget {
 class _CommentsModalState extends State<CommentsModal> {
   List<Map<String, dynamic>> _comments = [];
   final TextEditingController _newCommentController = TextEditingController();
-  bool _isPrivate = false; // 비밀 댓글 여부 설정
+  final Map<int, TextEditingController> _editCommentControllers = {};
+  bool _isPrivate = false;
+  int? _editingCommentId;
 
   @override
   void initState() {
@@ -498,6 +559,10 @@ class _CommentsModalState extends State<CommentsModal> {
     if (response.statusCode == 200) {
       setState(() {
         _comments = List<Map<String, dynamic>>.from(jsonDecode(response.body));
+        for (var comment in _comments) {
+          _editCommentControllers[comment['comment_id']] =
+              TextEditingController();
+        }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -514,7 +579,7 @@ class _CommentsModalState extends State<CommentsModal> {
 
       final requestBody = {
         'content': _newCommentController.text,
-        'public': !_isPrivate, // 체크박스 상태에 따라 비밀 댓글 여부 설정
+        'public': _isPrivate,
       };
 
       try {
@@ -528,14 +593,9 @@ class _CommentsModalState extends State<CommentsModal> {
         );
 
         if (response.statusCode == 200) {
-          setState(() {
-            _comments.add({
-              'content': _newCommentController.text,
-              'first_name': 'You',
-              'createdAt': DateTime.now().toString(),
-            });
-            _newCommentController.clear();
-          });
+          _fetchComments();
+          _showDialog(
+              'Comment Posted', 'Your comment has been successfully posted.');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to post comment.')),
@@ -549,72 +609,210 @@ class _CommentsModalState extends State<CommentsModal> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          const Text('Comments', style: TextStyle(fontFamily: 'ggsansBold')),
-          const Divider(),
-          // 댓글 리스트 표시
-          Expanded(
-            child: _comments.isNotEmpty
-                ? ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _comments.length,
-                    itemBuilder: (context, index) {
-                      final comment = _comments[index];
-                      return ListTile(
-                        title: Text(comment['content']),
-                        subtitle: Text(
-                            '${comment['first_name']} - ${comment['createdAt']}'),
-                      );
-                    },
-                  )
-                : const Center(child: Text('No comments yet.')),
+  Future<void> _editComment(int commentId) async {
+    final controller = _editCommentControllers[commentId];
+    if (controller != null && controller.text.isNotEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final url = '${ApiAddress}/comments/${widget.marketId}/$commentId';
+
+      final requestBody = {
+        'content': controller.text,
+        'public': _isPrivate,
+      };
+
+      try {
+        final response = await http.put(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(requestBody),
+        );
+
+        if (response.statusCode == 200) {
+          _fetchComments();
+          _showDialog(
+              'Comment Updated', 'Your comment has been successfully updated.');
+          setState(() {
+            _editingCommentId = null;
+            controller.clear();
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to update comment.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('An error occurred.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteComment(int commentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final url = '${ApiAddress}/comments/delete/${widget.marketId}/$commentId';
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        _fetchComments();
+        _showDialog(
+            'Comment Deleted', 'Your comment has been successfully deleted.');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to delete comment.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('An error occurred.')),
+      );
+    }
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          const Divider(),
-          // 댓글 입력란 및 비밀 댓글 체크박스
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _newCommentController,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your comment',
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _isPrivate,
-                          onChanged: (value) {
-                            setState(() {
-                              _isPrivate = value ?? false;
-                            });
-                          },
-                        ),
-                        const Text('Private', style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: _submitComment,
-                    ),
-                  ],
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Text(content),
+                const SizedBox(height: 20),
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             ),
           ),
-        ],
+        );
+      },
+    );
+  }
+
+  String _formatDate(String dateString) {
+    final DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Comments', style: TextStyle(fontFamily: 'ggsansBold')),
+            const Divider(),
+            Expanded(
+              child: _comments.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = _comments[index];
+                        return ListTile(
+                          title: _editingCommentId == comment['comment_id']
+                              ? TextField(
+                                  controller: _editCommentControllers[
+                                      comment['comment_id']],
+                                  decoration: const InputDecoration(
+                                      hintText: 'Edit your comment'),
+                                )
+                              : Text(comment['content']),
+                          subtitle: Text(
+                            '${comment['first_name']} ${comment['last_name']} \n${_formatDate(comment['createdAt'])}',
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  if (_editingCommentId ==
+                                      comment['comment_id']) {
+                                    _editComment(comment['comment_id']);
+                                  } else {
+                                    setState(() {
+                                      _editingCommentId = comment['comment_id'];
+                                      _editCommentControllers[
+                                              comment['comment_id']]
+                                          ?.text = comment['content'];
+                                    });
+                                  }
+                                },
+                              ),
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () async {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  final userId = prefs.getString('userId');
+                                  if (userId == comment['user_id'].toString()) {
+                                    await _deleteComment(comment['comment_id']);
+                                  } else {
+                                    _showDialog('Permission Denied',
+                                        'You do not have permission to delete this comment.');
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  : const Center(child: Text('No comments yet.')),
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _newCommentController,
+                      decoration:
+                          const InputDecoration(hintText: 'Enter your comment'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: _editingCommentId != null
+                        ? () => _editComment(_editingCommentId!)
+                        : _submitComment,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

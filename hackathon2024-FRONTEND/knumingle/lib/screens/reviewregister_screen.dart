@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:knumingle/constants/url.dart';
 import 'package:knumingle/screens/review_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewRegisterScreen extends StatefulWidget {
@@ -19,16 +21,24 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
   String? _title;
   int? _selectedRating;
   String _description = '';
-  List<XFile> _images = [];
+  List<File> _images = []; // Changed from XFile to File
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _addImages() async {
     if (_images.length < 10) {
       final List<XFile>? selectedImages = await _picker.pickMultiImage();
       if (selectedImages != null) {
+        final Directory appDocDir = await getApplicationDocumentsDirectory();
+
         setState(() {
           if (_images.length + selectedImages.length <= 10) {
-            _images.addAll(selectedImages);
+            for (XFile file in selectedImages) {
+              // Save the file to the documents directory
+              String fileName = path.basename(file.path);
+              File newImage = File('${appDocDir.path}/$fileName');
+              file.saveTo(newImage.path); // Save the image
+              _images.add(newImage);
+            }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -65,11 +75,15 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
             ? 'SOSO'
             : 'BAD';
 
+    // Create a list of image paths
+    List<String> imagePaths = _images.map((image) => image.path).toList();
+
     final body = jsonEncode({
       'keyword': _selectedCategory,
       'title': _title,
       'content': _description,
       'reaction': reaction,
+      'images': imagePaths,
     });
     print(body);
 
@@ -290,7 +304,7 @@ class _ReviewRegisterScreenState extends State<ReviewRegisterScreen> {
                         return Stack(
                           children: [
                             Image.file(
-                              File(_images[index].path),
+                              _images[index],
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),
